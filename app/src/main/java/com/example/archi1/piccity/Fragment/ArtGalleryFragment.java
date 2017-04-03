@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -77,7 +78,7 @@ public class ArtGalleryFragment extends android.support.v4.app.Fragment implemen
     public String userId;
     public TextView textView;
     public String strSelectedImage;
-    public Spinner spnerCategory;
+    public Spinner spCategory,spPrice,spLocation;
 
     public ImageView dialogCaptureImage;
     public String strPrice, strLctn, strDesc;
@@ -109,9 +110,55 @@ public class ArtGalleryFragment extends android.support.v4.app.Fragment implemen
         userId = utils.ReadSharePrefrence(getActivity(), Constant.UserId);
         artPhotoGridView = (GridView) view.findViewById(R.id.fragment_art_gallery_grid);
         fragmentLinearlayout = (LinearLayout) view.findViewById(R.id.fragment_art_gallery_ll_camera);
-        spnerCategory = (Spinner) view.findViewById(R.id.spnrCategoryArtGallery);
-        ivSearch = (ImageView) view.findViewById(R.id.ivSearchArtGallery);
-        ivSearch.setOnClickListener(this);
+       /* spCategory = (Spinner) view.findViewById(R.id.spnrCategoryArtGallery);
+        ivSearch = (ImageView) view.findViewById(R.id.ivSearchArtGallery);*/
+
+        spCategory = (Spinner)view.findViewById(R.id.spCategory);
+        spLocation = (Spinner)view.findViewById(R.id.spLocation);
+
+
+    spCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+       /* if (filterCategoryNameArray !=                                                                                                null) {
+            filterCategoryNameArray.clear();
+        }
+*/
+        Toast.makeText(getApplicationContext(), "ItemSelected"+position, Toast.LENGTH_SHORT).show();
+      /*  if (selectedCategoryList.equalsIgnoreCase("all")) {
+
+            artGalleryAdapter = new ArtGalleryAdapter(getActivity(), artGalleryArrayList);
+            artPhotoGridView.setAdapter(artGalleryAdapter);
+            artGalleryAdapter.notifyDataSetChanged();
+            Log.d("msg", "filter if" + artGalleryArrayList.size());
+
+        } else {
+
+            Log.d("msg", "filter else " + filterCategoryNameArray.toString());
+
+            for (int i = 0; i < artGalleryArrayList.size(); i++) {
+                String name = artGalleryArrayList.get(i).getCategory();
+                if (selectedCategoryList.equalsIgnoreCase(name)) {
+                    filterCategoryNameArray.add(artGalleryArrayList.get(i));
+                }
+            }
+
+            artGalleryAdapter = new ArtGalleryAdapter(getActivity(), filterCategoryNameArray);
+            artPhotoGridView.setAdapter(artGalleryAdapter);
+            artGalleryAdapter.notifyDataSetChanged();
+        }*/
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+});
+
+
+
+     // ivSearch.setOnClickListener(this);
         categoryIdArray = new ArrayList<>();
         categoryNameArry = new ArrayList<>();
         filterCategoryNameArray = new ArrayList<>();
@@ -322,36 +369,11 @@ public class ArtGalleryFragment extends android.support.v4.app.Fragment implemen
 
                 break;
 
-            case R.id.ivSearchArtGallery:
+           /* case R.id.spCategory:
 
-                if (filterCategoryNameArray != null) {
-                    filterCategoryNameArray.clear();
-                }
 
-                if (selectedCategoryList.equalsIgnoreCase("all")) {
-
-                    artGalleryAdapter = new ArtGalleryAdapter(getActivity(), artGalleryArrayList);
-                    artPhotoGridView.setAdapter(artGalleryAdapter);
-                    artGalleryAdapter.notifyDataSetChanged();
-                    Log.d("msg", "filter if" + artGalleryArrayList.size());
-
-                } else {
-
-                    Log.d("msg", "filter else " + filterCategoryNameArray.toString());
-
-                    for (int i = 0; i < artGalleryArrayList.size(); i++) {
-                        String name = artGalleryArrayList.get(i).getCategory();
-                        if (selectedCategoryList.equalsIgnoreCase(name)) {
-                            filterCategoryNameArray.add(artGalleryArrayList.get(i));
-                        }
-                    }
-
-                    artGalleryAdapter = new ArtGalleryAdapter(getActivity(), filterCategoryNameArray);
-                    artPhotoGridView.setAdapter(artGalleryAdapter);
-                    artGalleryAdapter.notifyDataSetChanged();
-                }
                 Log.d("msg", "filter " + filterCategoryNameArray.toString());
-                break;
+                break;*/
         }
     }
 
@@ -440,9 +462,9 @@ public class ArtGalleryFragment extends android.support.v4.app.Fragment implemen
 
 
                     ArrayAdapter<String> spnerCategoryadapter = new ArrayAdapter<String>(getActivity(), R.layout.spinner_item_view, categoryNameArry);
-                    spnerCategory.setAdapter(spnerCategoryadapter);
+                    spCategory.setAdapter(spnerCategoryadapter);
 
-                    spnerCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    spCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                         @Override
                         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                             selectedCategoryList = categoryNameArry.get(position);
