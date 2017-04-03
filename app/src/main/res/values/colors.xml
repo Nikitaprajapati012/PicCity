@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="accent_color">#ffffff</color>
+    <color name="color_primary_dark">#1976D2</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorPrimaryblue">#32a851</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="textColor">#2a82ed</color>
+    <color name="background">#E1E1E1</color>
+    <color name="grey">#84a0b3</color>
+    <color name="transperentblack">#88000000</color>
+    <color name="transparent_black">#95000000</color>
+    <color name="viewBg">#f1f5f8</color>
+    <color name="album_title">#4c4c4c</color>
+    <color name="red">#FF0000</color>
+    <color name="orange">#FA0</color>
+    <color name="nliveo_black">#000000</color>
+    <color name="bgcolor">#F4F6F6</color>
+    <color name="graylight">#939393</color>
+    <color name="white">#FFFFFF</color>
+    <color name="blue">#537BBB</color>
+    <color name="primarytext">#212121</color>
+    <color name="secondarytext">#757575</color>
+    <color name="divider">#BDBDBD</color>
+    <color name="brownlight">#dedede</color>
+    <color name="black">#000000</color>
+    <color name="brown">#F9F9F9</color>
+    <color name="bckgrund">#e7eff9</color>
+    <color name="wpn">#537BBB</color>
+    <color name="graytextcolor">#537BBB</color>
+    <color name="toolBarPink">#8d2086</color>
+
+
+    <!--<resources>
+    <color name="colorPrimary">#F50057</color>
+    <color name="colorPrimaryDark">#F50057</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="viewBg">#f1f5f8</color>
+    <color name="album_title">#4c4c4c</color>-->
+
+
+</resources>

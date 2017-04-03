@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_80sdp"
+            android:background="@color/brownlight"
+            android:id="@+id/relative_layout"
+           >
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/txtLogin"
+                android:text="Login"
+                android:textSize="@dimen/_22sdp"
+                android:layout_marginTop="@dimen/_12sdp"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="@dimen/_12sdp"/>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/txtCreateAccount"
+                android:textSize="@dimen/_12sdp"
+                android:text="Dont have an account ? Create One Now."
+                android:layout_marginTop="@dimen/_39sdp"
+                android:layout_alignParentRight="true"/>
+
+
+
+
+        </RelativeLayout>
+
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/rltv_layout"
+            android:layout_below="@+id/relative_layout">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Email"
+                android:layout_marginLeft="@dimen/_16sdp"
+                android:textSize="@dimen/_16sdp"
+                android:layout_marginTop="@dimen/_12sdp"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_32sdp"
+                android:paddingLeft="@dimen/_5sdp"
+                android:background="@drawable/border"
+                android:layout_marginTop="@dimen/_32sdp"
+                android:layout_marginLeft="@dimen/_8sdp"
+                android:layout_marginRight="@dimen/_8sdp"
+                android:id="@+id/edt_dialog_email"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/edt_dialog_email"
+                android:text="Password"
+                android:layout_marginLeft="@dimen/_16sdp"
+                android:textSize="@dimen/_16sdp"
+                android:layout_marginTop="@dimen/_12sdp"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_32sdp"
+                android:id="@+id/edt_dialog_password"
+                android:inputType="textPassword"
+                android:paddingLeft="@dimen/_5sdp"
+                android:background="@drawable/border"
+                android:layout_below="@+id/edt_dialog_email"
+                android:layout_marginTop="@dimen/_32sdp"
+                android:layout_marginLeft="@dimen/_8sdp"
+                android:layout_marginRight="@dimen/_8sdp"
+                />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/rltv_layout"
+            android:layout_marginTop="@dimen/_22sdp">
+
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_dialog_login"
+                android:background="@drawable/border"
+                android:text="Login"
+                android:layout_marginTop="@dimen/_12sdp"
+                android:layout_marginLeft="@dimen/_12sdp"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_dialog_cancel"
+                android:background="@drawable/border"
+                android:text="Cancel"
+                android:layout_marginLeft="@dimen/_42sdp"
+                android:layout_marginTop="@dimen/_12sdp"/>
+        </LinearLayout>
+    </RelativeLayout>
+
+</LinearLayout>

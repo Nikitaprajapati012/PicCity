@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+
+    <GridView
+        android:id="@+id/fragment_a_list_gridview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/fragment_royalty_constraint"
+        android:layout_gravity="center"
+        android:columnWidth="100dp"
+        android:gravity="center"
+        android:minHeight="90dp"
+        android:numColumns="2"
+        android:stretchMode="columnWidth" />
+
+    <LinearLayout
+        android:id="@+id/fragment_royalty_gallery_ll_camera_alist"
+        android:layout_width="@dimen/_250sdp"
+        android:layout_height="@dimen/_40sdp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/layout_border"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_32sdp"
+            android:gravity="center_vertical"
+            android:text="Upload for A List"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_16sdp" />
+
+        <ImageView
+            android:id="@+id/fragment_royalty_gallery_iv_camera"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_6sdp"
+            android:src="@drawable/ic_camera_screen" />
+    </LinearLayout>
+</RelativeLayout>

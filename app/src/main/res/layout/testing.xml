@@ -1,0 +1,399 @@
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                                 xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                 xmlns:tools="http://schemas.android.com/tools"
+                                                 android:id="@+id/coordinatorLayout_activity_detail"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/background"
+        tools:context="com.app.archirayan.auctions.Activity.ProductDetails">
+
+
+        <include
+            android:id="@+id/includeLayout"
+            layout="@layout/header_product_details" />
+
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/activity_product_detail_chat"
+            android:layout_below="@+id/includeLayout">
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/includeLayout">
+
+
+                <RelativeLayout
+                    android:id="@+id/r1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:background="@drawable/white_edt">
+
+                    <RelativeLayout
+                        android:id="@+id/activity_product_details_rv_imagesize"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/activity_product_detail_timestam"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            android:layout_alignParentRight="true"
+                            android:padding="@dimen/_10sdp"
+                            android:text="3 houre" />
+
+
+                        <ImageView
+                            android:id="@+id/activity_product_detail_product_image_pager"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
+                            android:layout_alignParentTop="true">
+
+                        </ImageView>
+
+
+                    </RelativeLayout>
+
+                    <TextView
+                        android:id="@+id/activity_product_detail_product_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/activity_product_details_rv_imagesize"
+                        android:layout_marginLeft="@dimen/_7sdp"
+                        android:layout_marginTop="@dimen/_4sdp"
+                        android:text="product name"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/activity_product_detail_product_price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/activity_product_detail_product_name"
+                        android:layout_marginLeft="@dimen/_7sdp"
+                        android:layout_marginTop="@dimen/_4sdp"
+                        android:text="product name"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/activity_product_details_product_discription"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/activity_product_detail_product_price"
+                        android:layout_marginLeft="@dimen/_7sdp"
+                        android:layout_marginTop="@dimen/_4sdp"
+                        android:text="hello this is good roduct i ever used"
+                        android:textSize="@dimen/_9sdp" />
+
+
+                    <View
+                        android:id="@+id/view1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/_2sdp"
+                        android:layout_below="@+id/activity_product_details_product_discription"
+                        android:layout_marginLeft="@dimen/_7sdp"
+                        android:layout_marginTop="@dimen/_4sdp"
+                        android:background="@color/background" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/view1"
+                        android:layout_marginTop="@dimen/_4sdp"
+                        android:orientation="horizontal">
+
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="@dimen/_5sdp"
+                            android:layout_weight="1">
+
+                            <ImageView
+                                android:id="@+id/iv_view"
+
+                                android:layout_width="@dimen/_20sdp"
+                                android:layout_height="match_parent"
+                                android:padding="@dimen/_1sdp"
+                                android:src="@drawable/ic_view" />
+
+                            <TextView
+
+                                android:id="@+id/activity_product_detail_views"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:layout_toRightOf="@+id/iv_view"
+                                android:gravity="center"
+                                android:padding="@dimen/_4sdp"
+                                android:text="5 views " />
+
+
+                            <View
+                                android:id="@+id/view2"
+                                android:layout_width="@dimen/_2sdp"
+                                android:layout_height="match_parent"
+                                android:layout_alignParentRight="true"
+                                android:layout_marginLeft="@dimen/_7sdp"
+                                android:layout_marginTop="@dimen/_4sdp"
+                                android:background="@color/background" />
+
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:id="@+id/activity_product_detail_islikes"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="@dimen/_5sdp"
+                            android:layout_weight="1"
+                            android:gravity="center">
+
+                            <ImageView
+                                android:id="@+id/iv_activity_product_detail_heart"
+                                android:layout_width="@dimen/_20sdp"
+                                android:layout_height="match_parent"
+                                android:padding="@dimen/_1sdp"
+                                android:src="@drawable/ic_heart_red"
+                                android:visibility="visible" />
+
+                            <ImageView
+                                android:id="@+id/iv_activity_product_detail_like"
+                                android:layout_width="@dimen/_20sdp"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/ic_like"
+                                android:visibility="invisible" />
+
+
+                            <View
+                                android:id="@+id/view3"
+                                android:layout_width="@dimen/_2sdp"
+                                android:layout_height="match_parent"
+                                android:layout_alignParentRight="true"
+                                android:layout_marginLeft="@dimen/_7sdp"
+                                android:layout_marginTop="@dimen/_4sdp"
+                                android:background="@color/background" />
+
+                            <TextView
+
+                                android:id="@+id/activity_product_detail_likes"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:padding="@dimen/_4sdp"
+                                android:text="5 views "
+                                android:layout_alignParentTop="true"
+                                android:layout_alignParentRight="true"
+                                android:layout_alignParentEnd="true"/>
+
+
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:id="@+id/activity_product_detail_rv_comment"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="@dimen/_5sdp"
+                            android:layout_weight="1">
+
+                            <TextView
+                                android:id="@+id/activity_product_detail_comments"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:layout_toRightOf="@+id/iv_commnets"
+                                android:gravity="center_horizontal"
+                                android:padding="@dimen/_4sdp"
+                                android:text="5 views " />
+
+                            <ImageView
+                                android:id="@+id/iv_commnets"
+                                android:layout_width="@dimen/_20sdp"
+                                android:layout_height="match_parent"
+                                android:padding="@dimen/_1sdp"
+                                android:src="@drawable/ic_comment"
+                                android:layout_alignParentTop="true"
+                                android:layout_alignParentLeft="true"
+                                android:layout_alignParentStart="true"/>
+
+                        </RelativeLayout>
+
+
+                    </LinearLayout>
+
+
+                </RelativeLayout>
+
+
+                <RelativeLayout
+                    android:id="@+id/rv3"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/r1"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:background="@drawable/white_edt">
+
+
+                    <ImageView
+                        android:id="@+id/iv_location_icon"
+                        android:layout_width="@dimen/_30sdp"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/_4sdp"
+                        android:src="@drawable/ic_location_pin" />
+
+                    <TextView
+                        android:id="@+id/activity_product_detail_tv_location_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@+id/iv_location_icon"
+                        android:gravity="center_vertical"
+                        android:padding="@dimen/_10sdp"
+                        android:text=" paldi,ahmedabad" />
+
+
+                    <FrameLayout
+                        android:id="@+id/frame1"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_180sdp"
+                        android:layout_below="@+id/activity_product_detail_tv_location_name">
+
+
+                        <RelativeLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+
+                            <!--<fragment
+
+                                android:id="@+id/Activity_product_detail_map_fragment"
+                                android:name="com.google.android.gms.maps.SupportMapFragment"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/_150sdp"
+                                tools:context="com.app.archirayan.auctions.Activity.LocationMap" />
+
+                            <ImageView
+
+                                android:id="@+id/Activity_product_detail_map_imageview"
+                                android:name="com.google.android.gms.maps.SupportMapFragment"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/_150sdp"
+                                android:visibility="visible"
+                                tools:context="com.app.archirayan.auctions.Activity.LocationMap" />-->
+
+
+                            <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                                android:id="@+id/activity_product_details_user_image"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/_60sdp"
+                                android:layout_alignParentBottom="true"
+                                android:layout_gravity="center_horizontal"
+                                android:src="@drawable/ic_placeholder"
+                                app:civ_border_color="@color/colorPrimaryDark"
+                                app:civ_border_width="2dp" />
+
+
+                        </RelativeLayout>
+
+
+                    </FrameLayout>
+
+                    <TextView
+                        android:id="@+id/activity_product_details_user_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/frame1"
+                        android:gravity="center_horizontal"
+                        android:text="name" />
+
+
+                    <ImageView
+                        android:id="@+id/activity_products_details_share_via_mobile"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/activity_product_details_user_name"
+                        android:layout_toLeftOf="@+id/activity_products_details_share_via_fb"
+                        android:padding="@dimen/_7sdp"
+                        android:src="@drawable/ic_smartphone" />
+
+                    <ImageView
+                        android:id="@+id/activity_products_details_share_via_fb"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/activity_product_details_user_name"
+                        android:layout_centerHorizontal="true"
+                        android:padding="@dimen/_7sdp"
+                        android:src="@drawable/ic_fb_share" />
+
+                    <ImageView
+                        android:id="@+id/activity_products_details_share_via_email"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/activity_product_details_user_name"
+                        android:layout_toRightOf="@+id/activity_products_details_share_via_fb"
+                        android:padding="@dimen/_7sdp"
+                        android:src="@drawable/ic_email" />
+
+
+                </RelativeLayout>
+
+
+                <TextView
+                    android:id="@+id/activity_product_details_user_name_more_item_from"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/rv3"
+                    android:layout_margin="@dimen/_5sdp"
+                    android:text="You may also like" />
+
+
+                <LinearLayout
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/activity_product_details_user_name_more_item_from"
+                    android:layout_marginBottom="@dimen/_4sdp"
+                    android:background="@color/background"
+                    android:orientation="horizontal">
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/activity_product_details_relative_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clipToPadding="false"
+                        android:scrollbars="horizontal" />
+
+
+                </LinearLayout>
+
+
+            </RelativeLayout>
+
+        </ScrollView>
+
+        <Button
+            android:id="@+id/activity_product_detail_chat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@color/colorPrimaryDark"
+            android:text="chat"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
+
+
+    </RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

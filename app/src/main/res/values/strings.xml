@@ -1,0 +1,57 @@
+<resources>
+    <string name="app_name">PicCity</string>
+    <string name="gallery">Gallery pics</string>
+    <string name="camera">Sale My Art</string>
+    <string name="mygallery">MyGallery</string>
+    <string name="art_list">A List</string>
+    <string name="alist">A List</string>
+    <string name="royalty">Royalty Pics List </string>
+    <string name="invite_user">Invite User</string>
+    <string name="canvasme">Canvas Me </string>
+    <string name="canvasmepic">Canvas My Pic </string>
+    <string name="personal_artist">Personal Artist</string>
+    <string name="logout">Logout</string>
+
+    <string name="hint_username">username</string>
+    <string name="hint_password">password</string>
+    <string name="btn_Login">Login</string>
+    <string name="hint_Mobile">Mobile</string>
+    <string name="hint_Name">Name</string>
+    <string name="hint_Email">Email</string>
+    <string name="enterimagename">Enter ImageName</string>
+    <string name="Email">Email</string>
+    <string name="forgetpassword">Forget Password</string>
+    <string name="submit">Submit</string>
+    <string name="password">Password</string>
+    <string name="email">Email</string>
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
+    <string name="action_settings">Settings</string>
+    <string name="takepic">Tap to Take Picture</string>
+    <string name="somethingwentwrong">Something went wrong.</string>
+    <string name="action_add_favourite">Add to Favourites</string>
+    <string name="action_view_detail">View In Detail</string>
+    <string name="send_to_my_gallery">Send to My Gallery </string>
+    <string name="canvas_gallery_pic">Canvas Gallery Pic</string>
+    <string name="canvas_me">Canvas Me</string>
+    <string name="paste_me">Paste Me</string>
+    <string name="canvas_my_pic">Canvas My Pic</string>
+    <string name="message">Enter Your Messege</string>
+
+    <string name="send">Send</string>
+    <string-array name="nav_drawer_labels">
+        <item>@string/gallery</item>
+        <item>@string/camera</item>
+        <item>@string/mygallery</item>
+        <item>@string/alist</item>
+        <item>@string/royalty</item>
+        <item>@string/canvas_me</item>
+        <item>@string/canvas_my_pic</item>
+        <item>@string/personal_artist</item>
+        <item>@string/invite_user</item>
+        <item>@string/logout</item>
+    </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

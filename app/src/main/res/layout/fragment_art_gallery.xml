@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:id="@+id/lnsearch"
+        android:padding="@dimen/_2sdp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+
+        <Spinner
+            android:padding="@dimen/_3sdp"
+            android:background="@drawable/edt_shape"
+            android:id="@+id/spnrCategoryArtGallery"
+            android:layout_width="@dimen/_25sdp"
+            android:layout_height="@dimen/_25sdp"
+            android:layout_weight="1" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:id="@+id/ivSearchArtGallery"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/ic_search_category_default" />
+
+    </LinearLayout>
+
+
+    <GridView
+        android:id="@+id/fragment_art_gallery_grid"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/lnsearch"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:horizontalSpacing="@dimen/_6sdp"
+        android:numColumns="auto_fit"
+        android:stretchMode="columnWidth">
+
+    </GridView>
+
+
+    <LinearLayout
+        android:id="@+id/fragment_art_gallery_ll_camera"
+        android:layout_width="@dimen/_250sdp"
+        android:layout_height="@dimen/_40sdp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/layout_border"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_32sdp"
+            android:gravity="center_vertical"
+            android:text="Sale Your Art"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_16sdp" />
+
+        <ImageView
+            android:id="@+id/fragment_art_gallery_iv_camera"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_6sdp"
+            android:src="@drawable/ic_camera_screen" />
+    </LinearLayout>
+
+
+</RelativeLayout>
