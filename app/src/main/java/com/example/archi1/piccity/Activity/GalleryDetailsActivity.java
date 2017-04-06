@@ -59,7 +59,7 @@ import static com.paypal.android.sdk.payments.PayPalConfiguration.ENVIRONMENT_SA
 public class GalleryDetailsActivity extends AppCompatActivity implements View.OnClickListener {
     public Utils utils;
     public String imgID, imgOriginal, imgCanvas, imgTitle, imgSizePrice;
-    public ImageView ivHeader;
+    public ImageView ivHeader,header_iv_back;
     public TextView tvImgTiitle, tvImgPrice;
     public Spinner spImgSize;
     public ArrayList<SizePrice> arraylistSizePrize;
@@ -122,7 +122,7 @@ public class GalleryDetailsActivity extends AppCompatActivity implements View.On
         tvImgTiitle = (TextView) findViewById(R.id.activity_glry_img_title);
         spImgSize = (Spinner) findViewById(R.id.activity_glry_size_spinner);
         imageBuy = (Button) findViewById(R.id.btn_buy_gallery_image);
-
+        header_iv_back = (ImageView)findViewById(R.id.header_iv_back);
 
         mRelativeSizePrice = (RelativeLayout) findViewById(R.id.activity_gallery_detail_sizeprice_layout);
         mRelativeSizePrice.setVisibility(View.INVISIBLE);
@@ -132,6 +132,13 @@ public class GalleryDetailsActivity extends AppCompatActivity implements View.On
         btnGlryDetailSendToMyGallery.setOnClickListener(this);
         btnGlrDetlaiPasteMe.setOnClickListener(this);
         btnGlrtDetailCanvasMyPic.setOnClickListener(this);
+
+        header_iv_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
     }
 
     private void init() {
@@ -347,7 +354,6 @@ public class GalleryDetailsActivity extends AppCompatActivity implements View.On
 
         @Override
         protected String doInBackground(String... params) {
-
             return Utils.getResponseofPost(Constant.Base_URL+"image.php", hashMap);
            // return utils.getResponseofGet(Constant.Base_URL + "image.php"+"user_id="+user_id+"&imgid="+imgID+"&img="+imgOriginal+"&imgprice="+imgSizePrice+"&transaction_id="+payment_id);
         }
@@ -358,7 +364,6 @@ public class GalleryDetailsActivity extends AppCompatActivity implements View.On
             Log.d("Re",s);
             Log.d("Re",user_id);
             pd.dismiss();
-
             Toast.makeText(GalleryDetailsActivity.this, "fgh"+user_id, Toast.LENGTH_SHORT).show();
             try{
                 JSONObject jsonObject = new JSONObject(s);

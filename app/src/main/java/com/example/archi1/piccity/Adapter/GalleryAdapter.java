@@ -25,7 +25,6 @@ import java.util.List;
  */
 
 public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHolder> {
-
     private Context mContext;
     private List<GalleryDetails> galleryDetailsList;
 
@@ -94,7 +93,6 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHo
 
 
         MyViewHolder(View view) {
-
             super(view);
             galleryImage = (ImageView) view.findViewById(R.id.adapter_gallery_image);
             glryImageTitle = (TextView) view.findViewById(R.id.adapter_gallery_image_title);
@@ -124,7 +122,6 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHo
                 case R.id.adapter_gallery_image_paste_me:
 
                     return true;
-
                 default:
             }
             return false;

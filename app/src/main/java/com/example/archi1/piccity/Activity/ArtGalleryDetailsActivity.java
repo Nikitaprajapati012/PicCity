@@ -34,6 +34,8 @@ import android.widget.Toast;
 import com.example.archi1.piccity.Chat.AlistChat;
 import com.example.archi1.piccity.Constant.Constant;
 import com.example.archi1.piccity.Constant.Utils;
+import com.example.archi1.piccity.Fragment.ArtGalleryFragment;
+import com.example.archi1.piccity.Model.ArtGallery;
 import com.example.archi1.piccity.R;
 
 import com.koushikdutta.async.future.FutureCallback;
@@ -57,7 +59,7 @@ public class ArtGalleryDetailsActivity extends AppCompatActivity implements View
     public Utils utils;
     public RelativeLayout relativeImagelayout;
     public ImageView imageView, ivMessage, ivInfo;
-    public ImageView ivProductClose;
+    public ImageView header_product_iv_back;
     public TextView txtName, txtPrice;
     public String imgID, imgPrice, imgPath, imgDescription, imgLocation, name, username, userid;
     public TextView txtProductMoreInfo, txtProductShare;
@@ -94,6 +96,8 @@ public class ArtGalleryDetailsActivity extends AppCompatActivity implements View
         ImageView ivEdit = (ImageView) findViewById(R.id.ivEdit);
         ivMessage = (ImageView) findViewById(R.id.header_alist_share);
         ivInfo = (ImageView) findViewById(R.id.header_alist_info);
+        header_product_iv_back = (ImageView)findViewById(R.id.header_product_iv_back);
+
         ivEdit.setOnClickListener(this);
         String useridd = Utils.ReadSharePrefrence(ArtGalleryDetailsActivity.this, Constant.USER_ID);
         init();
@@ -151,7 +155,7 @@ public class ArtGalleryDetailsActivity extends AppCompatActivity implements View
             userid = getIntent().getExtras().getString("userid");
             String currency = getIntent().getExtras().getString("currency");
             imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-            //   Picasso.with(getApplicationContext()).load(imgPath).placeholder(R.drawable.ic_placeholder).into(imageView);
+          //Picasso.with(getApplicationContext()).load(imgPath).placeholder(R.drawable.ic_placeholder).into(imageView);
 
             txtName.setText("Name: " + name);
             //tvDescription.setText("Description : " + imgDescription);
@@ -162,6 +166,15 @@ public class ArtGalleryDetailsActivity extends AppCompatActivity implements View
 //        ivProductClose.setOnClickListener(this);
         ivMessage.setOnClickListener(this);
         ivInfo.setOnClickListener(this);
+        header_product_iv_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+                /*Intent i = new Intent(ArtGalleryDetailsActivity.this,ArtGalleryFragment.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(i);*/
+            }
+        });
         //txtProductMoreInfo.setOnClickListener(this);
     }
 
@@ -207,23 +220,17 @@ public class ArtGalleryDetailsActivity extends AppCompatActivity implements View
                 //            txtProductShare.setVisibility(View.GONE);
 
 
-               dialog = new Dialog(ArtGalleryDetailsActivity.this);
+                dialog = new Dialog(ArtGalleryDetailsActivity.this);
 
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialog.setContentView(R.layout.dialog_image_more_info);
-                dialog.setCancelable(false);
+                dialog.setCancelable(true);
+                dialog.setCanceledOnTouchOutside(true);
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
                 Window window = dialog.getWindow();
 
                 window.setLayout(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 WindowManager.LayoutParams wlp = window.getAttributes();
-
-                /*wlp.gravity = Gravity.TOP;
-                wlp.flags &= ~WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-                wlp.height = 500;*/
-                /*wlp.width = 700;
-                wlp.height = 500;*/
-
 
                 //window.setLayout(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 window.setAttributes(wlp);
@@ -334,13 +341,6 @@ public class ArtGalleryDetailsActivity extends AppCompatActivity implements View
         }
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        dialog.dismiss();
-
-    }
-
     public void SoldProduct() {
 
 /*
@@ -433,10 +433,10 @@ public class ArtGalleryDetailsActivity extends AppCompatActivity implements View
 
             try {
                 Log.d("msg", "detial activity img path " + imgPath);
-                URL url = new URL(imgPath);
-                Bitmap image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                    URL url = new URL(imgPath);
+                    Bitmap image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
 
-                rotatedBitmap = RotateBitmap(image, 90f);
+                    rotatedBitmap = RotateBitmap(image, 90f);
                 Log.d("msg", "rotatedBitmap   " + rotatedBitmap);
 
 

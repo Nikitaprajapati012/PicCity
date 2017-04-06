@@ -158,7 +158,7 @@ public class RoyaltyPicDetailsActivity extends AppCompatActivity implements View
                 ImageView ivBack = (ImageView)dialog.findViewById(R.id.ivBack);
                 tvUser.setText("Name : "+strImageUserName);
                 Toast.makeText(this, ""+strUserProfile, Toast.LENGTH_SHORT).show();
-
+                Log.d("IMage",""+strUserProfile);
                 Picasso.with(this)
                         .load(strUserProfile)
                         .placeholder(R.drawable.ic_placeholder) //this is optional the image to display while the url image is downloading
@@ -172,21 +172,11 @@ public class RoyaltyPicDetailsActivity extends AppCompatActivity implements View
                         dialog.dismiss();
                     }
                 });
-
-               // onBackPressed(dialog.dismiss(););
                 break;
 
         }
 
     }
-
-    /* switch (v.getId()){
-                case R.id.txt_royalty_product_share:
-                Intent shareIntent = new Intent(Intent.ACTION_SEND);
-                shareIntent.setType("image/jpeg");
-                shareIntent.putExtra(Intent.EXTRA_STREAM,imgPath);
-                startActivity(Intent.createChooser(shareIntent,"sharing Image"));
-    }*/
 
     public void onBuyPressed(View pressed) {
 

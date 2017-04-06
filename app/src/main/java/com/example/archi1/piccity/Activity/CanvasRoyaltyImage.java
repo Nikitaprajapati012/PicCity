@@ -26,7 +26,7 @@ public class CanvasRoyaltyImage extends AppCompatActivity {
     public Utils utils;
     public ArrayList<SizePrice> arraylistSizePrize;
     public String strCanvasRoyaltyimgId, strCanvasRoyaltyImgUserName, strCanvasRoyaltyUserId, strCanvasRoyaltyImg;
-    public ImageView ivcanvasRoyaltyImage;
+    public ImageView ivcanvasRoyaltyImage,header_iv_back;
     public Spinner spinnerCanvasRoyaltyImageSize;
     public TextView txtCanvasRoyaltyImagePrice;
     public TextView txtCanvasRoyaltyImageOwnerName;
@@ -42,6 +42,13 @@ public class CanvasRoyaltyImage extends AppCompatActivity {
         arraylistSizePrize = new ArrayList<>();
 
         init();
+
+        header_iv_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
     }
 
     private void init() {
@@ -50,7 +57,7 @@ public class CanvasRoyaltyImage extends AppCompatActivity {
         spinnerCanvasRoyaltyImageSize = (Spinner) findViewById(R.id.spinner_canvas_royalty_image_size);
         txtCanvasRoyaltyImagePrice = (TextView) findViewById(R.id.txt_canvas_royalty_image_price);
         txtCanvasRoyaltyImageOwnerName = (TextView) findViewById(R.id.txt_canvas_royalty_img_owner_name);
-
+        header_iv_back = (ImageView)findViewById(R.id.header_iv_back);
         if (getIntent().getExtras() != null) {
 
             strCanvasRoyaltyimgId = getIntent().getExtras().getString("canvasRoyaltyImageId");

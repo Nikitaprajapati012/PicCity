@@ -1,6 +1,5 @@
 package com.example.archi1.piccity.Fragment;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -9,14 +8,12 @@ import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.example.archi1.piccity.Adapter.RoyaltyPicAdapter;
 import com.example.archi1.piccity.Constant.Constant;
@@ -186,6 +183,4 @@ public class RoyaltyPicFragment extends Fragment implements View.OnClickListener
             pd.dismiss();
         }
     }
-
-
 }

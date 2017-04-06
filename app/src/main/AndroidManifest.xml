@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.example.archi1.piccity">
 
+    <uses-permission android:name="android.permission.SEND_SMS"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.CAMERA"/>
@@ -49,6 +50,8 @@
         <activity android:name=".Activity.CanvasRoyaltyImage"/>
         <activity android:name=".Activity.Testing"/>
         <activity android:name=".Chat.AlistChat">
+        </activity>
+        <activity android:name=".Activity.Canvas_MyGallery_Pics">
         </activity>
     </application>
 

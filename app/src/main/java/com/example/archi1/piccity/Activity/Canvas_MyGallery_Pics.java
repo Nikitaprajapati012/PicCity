@@ -1,6 +1,5 @@
 package com.example.archi1.piccity.Activity;
 
-import android.media.Image;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,24 +22,23 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class CanvasGalleryImage extends AppCompatActivity {
+public class Canvas_MyGallery_Pics extends AppCompatActivity {
 
     public Utils utils;
 
     public ArrayList<SizePrice> arraylistSizePrize;
-    public String strCanvasimgId, strCanvasImgTitle, strCanvasImgOriginal, strCanvasImgCanvas, strCanvasSizePrice;
+    public String strCanvasimgId, strCanvasImgTitle, strCanvasImgCanvas, strCanvasSizePrice;
     public ImageView ivcanvasGalleryImage, header_iv_back;
     public Spinner spinnerCanvasGalleryImageSize;
     public TextView txtCanvasGalleryImagePrice;
     public TextView txtCanvasGalleryImagetitle;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_canvas_gallery_image);
+        setContentView(R.layout.activity_canvas__my_gallery__pics2);
 
-        utils = new Utils(CanvasGalleryImage.this);
+        utils = new Utils(Canvas_MyGallery_Pics.this);
         arraylistSizePrize = new ArrayList<>();
 
         init();
@@ -50,28 +48,27 @@ public class CanvasGalleryImage extends AppCompatActivity {
                 onBackPressed();
             }
         });
-
     }
 
-
-    private void init() {
-
-        ivcanvasGalleryImage = (ImageView) findViewById(R.id.iv_canvas_gallery_image);
-        spinnerCanvasGalleryImageSize = (Spinner) findViewById(R.id.spinner_canvas_gallery_image_size);
-        txtCanvasGalleryImagePrice = (TextView) findViewById(R.id.txt_canvas_gallery_image_price);
-        txtCanvasGalleryImagetitle = (TextView) findViewById(R.id.txt_canvas_gallery_img_title);
+    public void init() {
+        ivcanvasGalleryImage = (ImageView) findViewById(R.id.iv_canvas_mygallery_image);
+        spinnerCanvasGalleryImageSize = (Spinner) findViewById(R.id.spinner_canvas_mygallery_image_size);
+        txtCanvasGalleryImagePrice = (TextView) findViewById(R.id.txt_canvas_mygallery_image_price);
+        txtCanvasGalleryImagetitle = (TextView) findViewById(R.id.txt_canvas_mygallery_img_title);
         header_iv_back = (ImageView) findViewById(R.id.header_iv_back);
 
-        if (getIntent().getExtras() != null) {
-            strCanvasimgId = getIntent().getExtras().getString("canvasID");
-            strCanvasImgTitle = getIntent().getExtras().getString("canvasImageTitle");
-            strCanvasImgOriginal = getIntent().getExtras().getString("canvasImageOriginal");
-            strCanvasImgCanvas = getIntent().getExtras().getString("canvasImageCanvasType");
-            strCanvasSizePrice = getIntent().getExtras().getString("canvasImageSizeAndPrice");
 
+            strCanvasimgId = getIntent().getStringExtra("Id");
+            strCanvasImgCanvas = getIntent().getStringExtra("Image");
+            strCanvasImgTitle = getIntent().getStringExtra("ImageName");
+        Log.d("strCanvasimgId",""+strCanvasimgId);
+        Log.d("strCanvasImgCanvas",""+strCanvasImgCanvas);
+        Log.d("strCanvasImgTitle",""+strCanvasImgTitle);
+        strCanvasSizePrice = utils.ReadSharePrefrence(getApplicationContext(), Constant.CanvasSizePrice);
 
+        Log.d("strCanvasSizePrice",""+strCanvasSizePrice);
             txtCanvasGalleryImagetitle.setText(strCanvasImgTitle);
-            Glide.with(getApplicationContext()).load(strCanvasImgOriginal).placeholder(R.drawable.ic_placeholder).into(ivcanvasGalleryImage);
+            Glide.with(getApplicationContext()).load(strCanvasImgCanvas).placeholder(R.drawable.ic_placeholder).into(ivcanvasGalleryImage);
 
             try {
                 JSONArray jsonArray = new JSONArray(strCanvasSizePrice.toString());
@@ -86,7 +83,9 @@ public class CanvasGalleryImage extends AppCompatActivity {
                     CanvassizePrice.setId(canvasImgId);
                     CanvassizePrice.setPrice(canvasImgPrice);
                     CanvassizePrice.setSize(canvasImgSize);
-                    //Log.d("vijay","id :"+id + "\n price :"+price+ "\n "+size +"\n ==============");
+
+                    Log.d("SJAS",""+jsonObject.getString("id")+jsonObject.getString("price")+ jsonObject.getString("size"));
+                    Log.d("vijay","id :"+canvasImgId + "\n price :"+canvasImgPrice+ "\n "+canvasImgSize +"\n ==============");
                     arraylistSizePrize.add(CanvassizePrice);
                 }
                 //Log.d("vijay","array size :"+arraylistSizePrize.size());
@@ -98,17 +97,17 @@ public class CanvasGalleryImage extends AppCompatActivity {
             ArrayList<String> CanvasImageSize = new ArrayList<>();
             for (int i = 0; i < arraylistSizePrize.size(); i++) {
                 CanvasImageSize.add(arraylistSizePrize.get(i).getSize());
+
             }
 
-            ArrayAdapter<String> spinnerSizePriceAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, CanvasImageSize);
-            spinnerSizePriceAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinnerCanvasGalleryImageSize.setAdapter(spinnerSizePriceAdapter);
+            ArrayAdapter<String> adpatersetsize = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, CanvasImageSize);
+            adpatersetsize.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinnerCanvasGalleryImageSize.setAdapter(adpatersetsize);
 
             spinnerCanvasGalleryImageSize.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     String CanvasImagePrice = arraylistSizePrize.get(position).getPrice();
-
                     txtCanvasGalleryImagePrice.setText(CanvasImagePrice);
                 }
 
@@ -117,11 +116,6 @@ public class CanvasGalleryImage extends AppCompatActivity {
 
                 }
             });
-
-        }
-
-
     }
-
-
 }
+

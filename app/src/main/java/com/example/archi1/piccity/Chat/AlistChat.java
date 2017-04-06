@@ -22,7 +22,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.util.Util;
 import com.example.archi1.piccity.Activity.MainActivity;
-import com.example.archi1.piccity.Adapter.AlistChatAdapter;
+//import com.example.archi1.piccity.Adapter.AlistChatAdapter;
 import com.example.archi1.piccity.Constant.Constant;
 import com.example.archi1.piccity.Constant.ImageFilePath;
 import com.example.archi1.piccity.Constant.Utils;
@@ -96,7 +96,7 @@ public class AlistChat extends AppCompatActivity implements View.OnClickListener
     QBUser user,userData;;
     public static QBChatService chatService;
     public ProgressBar pd;
-    public AlistChatAdapter alistChatAdapter;
+    // public AlistChatAdapter alistChatAdapter;
 
 
     @Override
@@ -126,12 +126,15 @@ public class AlistChat extends AppCompatActivity implements View.OnClickListener
         ivAttachment.setOnClickListener(this);
 
         uNameStr = Utils.ReadSharePrefrence(getApplicationContext(), Constant.Email);
-        uPwdStr = Utils.ReadSharePrefrence(getApplicationContext(), Constant.USER_PASS);
+        uPwdStr = Utils.ReadSharePrefrence(getApplicationContext(),Constant.USER_PASS);
         Log.e("UNAME ", "NM " + uNameStr);
         Log.e("PASSWORD ", "PWD " + uPwdStr);
+
+        Toast.makeText(this, "password : "+uPwdStr, Toast.LENGTH_SHORT).show();
         user = new QBUser();
         user.setEmail(uNameStr);
         user.setPassword(uPwdStr);
+        // createSession(user);
         // LOG IN CHAT SERVICE
         if (!ArtGalleryFragment.chatService.isLoggedIn()) {
             ArtGalleryFragment.chatService.login(user, new QBEntityCallback<QBUser>() {
@@ -143,8 +146,8 @@ public class AlistChat extends AppCompatActivity implements View.OnClickListener
 
                 @Override
                 public void onError(QBResponseException errors) {
-                    Log.e("$$$$$$$$$$$", "not loged\n" + errors.getMessage());
-//                    Toast.makeText(getApplicationContext(), "Fail " + errors, Toast.LENGTH_SHORT).show();
+                    Log.e("$$$$$$$$$$$$", "not loged\n" + errors.getMessage());
+                    //Toast.makeText(getApplicationContext(), "Fail " + errors, Toast.LENGTH_SHORT).show();
                     //error
 
                 }
@@ -171,7 +174,7 @@ public class AlistChat extends AppCompatActivity implements View.OnClickListener
                     dia = dialogs.get(0).getDialogId();
                     Log.d("Dialog_Data", dia);
                     for (int i = 0; i < dialogs.size(); i++) {
-//                    Log.e("COMPARE", " " + id + " WITH " + dialogs.get(i).getOccupants().get(0));
+//                  Log.e("COMPARE", " " + id + " WITH " + dialogs.get(i).getOccupants().get(0));
 
                         for (int j = 0; j < dialogs.get(i).getOccupants().size(); j++) {
                             Log.d("*********","%%%%%%%%%%%%%%%%%%%%%%");
@@ -204,9 +207,10 @@ public class AlistChat extends AppCompatActivity implements View.OnClickListener
                                             chatArraylist.add(hashmap);
                                         }
 
-                                        /*chatListAdapter = new PrivateChatMsgListAdapter(getApplicationContext(), chatArraylist);
-                                        lvChatDetails.setAdapter(chatListAdapter);
-//                                      chatListAdapter.notifyDataSetChanged();*/
+                                      /*  alistChatAdapter = new AlistChatAdapter(getApplicationContext(), chatArraylist);
+                                        lvChatDetails.setAdapter(alistChatAdapter);
+                                        alistChatAdapter.notifyDataSetChanged();*/
+
                                     }
                                     @Override
                                     public void onError(QBResponseException errors) {
@@ -232,7 +236,7 @@ public class AlistChat extends AppCompatActivity implements View.OnClickListener
         }
 
 
-//        createSession(user);
+        //createSession(user);
     }
 
     @Override
@@ -315,10 +319,10 @@ public class AlistChat extends AppCompatActivity implements View.OnClickListener
                         hashmap.put("url", RecivedUrl);
                         chatArraylist.add(hashmap);
                     }
-
-                    /*chatListAdapter = new PrivateChatMsgListAdapter(getApplicationContext(), chatArraylist);
-                    lvChatDetails.setAdapter(chatListAdapter);
-                    chatListAdapter.notifyDataSetChanged();
+/*
+                    alistChatAdapter = new AlistChatAdapter(getApplicationContext(), chatArraylist);
+                    lvChatDetails.setAdapter(alistChatAdapter);
+                    alistChatAdapter.notifyDataSetChanged();
                     scrollMyListViewToBottom();*/
                 }
 
@@ -373,7 +377,7 @@ public class AlistChat extends AppCompatActivity implements View.OnClickListener
                 public void processMessage(QBPrivateChat privateChat, final QBChatMessage chatMessage) {
                     Log.e("privateChat ", " " + privateChat);
                     Log.e("chatMessage", "" + chatMessage);
-                   // chatListAdapter.notifyDataSetChanged();
+                    // alistChatAdapter.notifyDataSetChanged();
                 }
 
                 @Override
@@ -459,11 +463,11 @@ public class AlistChat extends AppCompatActivity implements View.OnClickListener
             Toast.makeText(getApplicationContext(), "Message Sent Successfully", Toast.LENGTH_SHORT).show();
             messageEdt.setText("");
 
-        /*    chatListAdapter = new PrivateChatMsgListAdapter(getApplicationContext(), chatArraylist);
-            lvChatDetails.setAdapter(chatListAdapter);
+          /*  alistChatAdapter = new AlistChatAdapter(getApplicationContext(), chatArraylist);
+            lvChatDetails.setAdapter(alistChatAdapter);
             lvChatDetails.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
             lvChatDetails.setStackFromBottom(true);
-            chatListAdapter.notifyDataSetChanged();
+            alistChatAdapter.notifyDataSetChanged();
             scrollMyListViewToBottom();*/
         }
 
@@ -548,7 +552,6 @@ public class AlistChat extends AppCompatActivity implements View.OnClickListener
             intent.setAction(ACTION_GET_CONTENT);//
             startActivityForResult(Intent.createChooser(intent, "Select Document"), SELECT_FILE);
         }
-
     }
 
     @Override
@@ -827,6 +830,7 @@ public class AlistChat extends AppCompatActivity implements View.OnClickListener
             QBContent.uploadFileTask(imageFile, true, "").performAsync(new QBEntityCallback<QBFile>() {
                 @Override
                 public void onSuccess(QBFile qbFile, Bundle bundle) {
+
                     Toast.makeText(AlistChat.this, "succes", Toast.LENGTH_SHORT).show();
                     QBChatMessage chatMessage = new QBChatMessage();
                     chatMessage.setBody(messageEdt.getText().toString());
@@ -866,6 +870,7 @@ public class AlistChat extends AppCompatActivity implements View.OnClickListener
     }
 
     private String getPath(Uri selectedImageUri) {
+
         String res = null;
         String[] proj = {MediaStore.Images.Media.DATA};
         Cursor cursor = getContentResolver().query(selectedImageUri, proj, null, null, null);
@@ -876,6 +881,5 @@ public class AlistChat extends AppCompatActivity implements View.OnClickListener
         cursor.close();
         return res;
     }
-
 }
 

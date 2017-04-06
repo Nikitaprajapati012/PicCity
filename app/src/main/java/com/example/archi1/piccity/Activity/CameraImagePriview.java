@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
@@ -49,7 +50,7 @@ public class CameraImagePriview extends AppCompatActivity implements View.OnClic
     public Button dialogDone, dialogCancel;
     public Spinner dialogSpnerPrice;
     public ArrayList<String> arrayListPrice;
-    private String imagePath;
+    private String imagePath, strPrice, strDesc, strLoc, strTitle;
     private Spinner dialogCategory;
     private ArrayList<String> arrayCategoryList;
     private String selectedCategoryName;
@@ -114,6 +115,7 @@ public class CameraImagePriview extends AppCompatActivity implements View.OnClic
         categoryIdArray = new ArrayList<>();
         categoryNameArray = new ArrayList<>();
 
+
         arrayListPrice.add("IND");
         arrayListPrice.add("USD");
 
@@ -126,20 +128,12 @@ public class CameraImagePriview extends AppCompatActivity implements View.OnClic
             }
         });
 
-        /*arrayCategoryList = new ArrayList<>();
-        arrayCategoryList.add("Electronic");
-        arrayCategoryList.add("Cars and Motors");
-        arrayCategoryList.add("Sports Leisure and Games");
-        arrayCategoryList.add("Home and Garden");
-        arrayCategoryList.add("Movies ,Books and Music");
-        arrayCategoryList.add("Fashion and Accessories");*/
 
         Bundle bundle = getIntent().getExtras();
 
         if (bundle != null) {
 
             String status = bundle.getString("status");
-
 
             if (status.equalsIgnoreCase("gallery")) {
 
@@ -243,7 +237,13 @@ public class CameraImagePriview extends AppCompatActivity implements View.OnClic
                 dialogDone.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Uploadimage();
+                        strPrice = dialogPrice.getText().toString();
+                        strLoc = dialogLoc.getText().toString();
+                        strDesc = dialogDesc.getText().toString();
+                        strTitle = dialogTitle.getText().toString();
+
+                        new UploadImage().execute();
+                      //  Uploadimage();
                         dialog.dismiss();
 
 
@@ -349,11 +349,52 @@ public class CameraImagePriview extends AppCompatActivity implements View.OnClic
 
     }
 
-    public void Uploadimage() {
+        class UploadImage extends AsyncTask<String, String, String> {
+            ProgressDialog pd;
+
+            @Override
+            protected void onPreExecute() {
+                pd = new ProgressDialog(CameraImagePriview.this);
+                pd.setMessage("Loading...");
+                pd.setCancelable(false);
+                pd.show();
+                super.onPreExecute();
+            }
+
+            @Override
+            protected String doInBackground(String... params) {
+                String url = Constant.Base_URL + "image_upload_new.php?" + "user_id=" + Utils.ReadSharePrefrence(getApplicationContext(), Constant.UserId) + "&image=" + new File(imagePath) + "&price=" + strPrice + "&description=" + strDesc + "&location=" + strLoc + "&name=" + strTitle + "&category_id=" + selectedCategoryName + "&currency=" + selectedPriceType;
+                Log.d("URL1",""+url);
+                return Utils.getResponseofGet(url);
+
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                pd.dismiss();
+                Log.d("POST",""+s);
+                JSONObject jsonObject = null;
+                try {
+                    jsonObject = new JSONObject(s);
+                    String status = jsonObject.getString("status");
+
+                    if (status.equalsIgnoreCase("true")) {
+                        Toast.makeText(CameraImagePriview.this, "Upload Successfully...", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(CameraImagePriview.this, ""+jsonObject.getString("msg"), Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                super.onPostExecute(s);
+            }
+        }
+
         // http://web-medico.com/web1/pic_citi/Api/image_upload_new.php?user_id=25&image=1.jpg&price=20$&
         // description=xyzzz&location=abc&category_id=1&currency=USD
 
-        final ProgressDialog progressDialog = new ProgressDialog(CameraImagePriview.this);
+        /*final ProgressDialog progressDialog = new ProgressDialog(CameraImagePriview.this);
         progressDialog.setMessage("Loading...");
         progressDialog.setCancelable(false);
         progressDialog.show();
@@ -384,14 +425,13 @@ public class CameraImagePriview extends AppCompatActivity implements View.OnClic
                     }
                 });
 
-    }
+    }*/
 
     public void GetCategoryList() {
 
 /*
         http://web-medico.com/web1/pic_citi/Api/get_category_list.php
 */
-
 
         final ProgressDialog progressDialog = new ProgressDialog(CameraImagePriview.this);
         progressDialog.setMessage("Loading...");
@@ -428,8 +468,8 @@ public class CameraImagePriview extends AppCompatActivity implements View.OnClic
                                 }
 
 
-                                // ArrayAdapter<String> spnerCategory = new ArrayAdapter<String>(CameraImagePriview.this, R.layout.spinner_item_view, categoryNameArray);
-                                // dialogCategory.setAdapter(spnerCategory);
+                                // ArrayAdapter<String> spCategory = new ArrayAdapter<String>(CameraImagePriview.this, R.layout.spinner_item_view, categoryNameArray);
+                                // dialogCategory.setAdapter(spCategory);
 
                                 dialogCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                                     @Override

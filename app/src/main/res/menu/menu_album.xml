@@ -15,7 +15,7 @@
         android:title="@string/canvas_me" />-->
     <item
         android:id="@+id/adapter_gallery_image_paste_me"
-        android:orderInCategory="101"
+        android:orderInCategory="102"
         android:title="@string/paste_me" />
    <!-- <item
         android:id="@+id/adapter_gallery_image_canvas_my_pic"

@@ -9,7 +9,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -57,13 +56,18 @@ import java.util.ArrayList;
 import static com.example.archi1.piccity.R.id.progressBar;
 import static com.example.archi1.piccity.R.id.progress_bar;
 import static com.example.archi1.piccity.R.id.view;
-import static com.facebook.FacebookSdk.getApplicationContext;
 
 /**
  * Created by archi1 on 11/25/2016.
  */
 
 public class ArtGalleryFragment extends android.support.v4.app.Fragment implements View.OnClickListener {
+
+  /*  private static final String PROPERTY_OCCUPANTS_IDS = "occupany_id";
+    private static final String PROPERTY_DIALOG_TYPE = "dialog_type";
+    private static final String PROPERTY_DIALOG_NAME = "dialog_name";
+    private static final String PROPERTY_NOTIFICATION_TYPE = "notification_type";
+    private static final String CREATING_DIALOG = "create_dialog";*/
 
     public Utils utils;
     public Bitmap bitmap;
@@ -78,7 +82,7 @@ public class ArtGalleryFragment extends android.support.v4.app.Fragment implemen
     public String userId;
     public TextView textView;
     public String strSelectedImage;
-    public Spinner spCategory,spPrice,spLocation;
+    public Spinner spnerCategory;
 
     public ImageView dialogCaptureImage;
     public String strPrice, strLctn, strDesc;
@@ -86,11 +90,10 @@ public class ArtGalleryFragment extends android.support.v4.app.Fragment implemen
     public String selectedCategoryList;
     public ImageView ivSearch;
     public ArrayList<ArtGallery> filterCategoryNameArray;
-    public QBUser userData;
+    QBUser user, userData;
     public static QBChatService chatService;
-    public String uNameStr, uPwdStr;
+    String uNameStr, uPwdStr;
     public ArrayList<String> arrayUserName;
-    QBUser user;
 
     @Nullable
     @Override
@@ -99,130 +102,95 @@ public class ArtGalleryFragment extends android.support.v4.app.Fragment implemen
 
         View view = inflater.inflate(R.layout.fragment_art_gallery, container, false);
         init(view);
-        new getUploadedImage().execute();
-        new getCategory().execute();
+        utils = new Utils(getActivity());
+        ((Activity) getActivity()).setTitle(R.string.art_list);
 
         QBSettings.getInstance().init(getActivity(), Constant.APP_ID, Constant.AUTH_KEY, Constant.AUTH_SECRET);
         QBSettings.getInstance().setAccountKey(Constant.ACCOUNT_KEY);
 
-        utils = new Utils(getActivity());
-        ((Activity) getActivity()).setTitle(R.string.art_list);
         userId = utils.ReadSharePrefrence(getActivity(), Constant.UserId);
         artPhotoGridView = (GridView) view.findViewById(R.id.fragment_art_gallery_grid);
         fragmentLinearlayout = (LinearLayout) view.findViewById(R.id.fragment_art_gallery_ll_camera);
-       /* spCategory = (Spinner) view.findViewById(R.id.spnrCategoryArtGallery);
-        ivSearch = (ImageView) view.findViewById(R.id.ivSearchArtGallery);*/
-
-        spCategory = (Spinner)view.findViewById(R.id.spCategory);
-        spLocation = (Spinner)view.findViewById(R.id.spLocation);
-
-
-    spCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-       /* if (filterCategoryNameArray !=                                                                                                null) {
-            filterCategoryNameArray.clear();
-        }
-*/
-        Toast.makeText(getApplicationContext(), "ItemSelected"+position, Toast.LENGTH_SHORT).show();
-      /*  if (selectedCategoryList.equalsIgnoreCase("all")) {
-
-            artGalleryAdapter = new ArtGalleryAdapter(getActivity(), artGalleryArrayList);
-            artPhotoGridView.setAdapter(artGalleryAdapter);
-            artGalleryAdapter.notifyDataSetChanged();
-            Log.d("msg", "filter if" + artGalleryArrayList.size());
-
-        } else {
-
-            Log.d("msg", "filter else " + filterCategoryNameArray.toString());
-
-            for (int i = 0; i < artGalleryArrayList.size(); i++) {
-                String name = artGalleryArrayList.get(i).getCategory();
-                if (selectedCategoryList.equalsIgnoreCase(name)) {
-                    filterCategoryNameArray.add(artGalleryArrayList.get(i));
-                }
-            }
-
-            artGalleryAdapter = new ArtGalleryAdapter(getActivity(), filterCategoryNameArray);
-            artPhotoGridView.setAdapter(artGalleryAdapter);
-            artGalleryAdapter.notifyDataSetChanged();
-        }*/
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
-    }
-});
-
-
-
-     // ivSearch.setOnClickListener(this);
+        spnerCategory = (Spinner) view.findViewById(R.id.spnrCategoryArtGallery);
+        ivSearch = (ImageView) view.findViewById(R.id.ivSearchArtGallery);
+        ivSearch.setOnClickListener(this);
         categoryIdArray = new ArrayList<>();
         categoryNameArry = new ArrayList<>();
         filterCategoryNameArray = new ArrayList<>();
 
+        ArrayList<String> arrayCategoryList = new ArrayList<>();
+        arrayCategoryList.add("Electronic");
+        arrayCategoryList.add("Cars and Motors");
+        arrayCategoryList.add("Sports Leisure and Games");
+        arrayCategoryList.add("Home and Garden");
+        arrayCategoryList.add("Movies ,Books and Music");
+        arrayCategoryList.add("Fashion and Accessories");
         fragmentLinearlayout.setOnClickListener(this);
+
+
+        //((Activity) getActivity()).setTitle("art gallery");
 
 
         uNameStr = Utils.ReadSharePrefrence(getActivity(), Constant.Email);
         uPwdStr = Utils.ReadSharePrefrence(getActivity(), Constant.USER_PASS);
         arrayUserName = new ArrayList<>();
-//      new GetFriendList().execute();
-
+//        new GetFriendList().execute();
         user = new QBUser();
         user.setEmail(uNameStr);
         user.setPassword(uPwdStr);
-        Toast.makeText(getActivity(), ""+user, Toast.LENGTH_SHORT).show();
         createSession(user);
 
         return view;
     }
 
     private void createSession(final QBUser QBuser) {
+
         QBAuth.createSession(QBuser).performAsync(new QBEntityCallback<QBSession>() {
             @Override
             public void onSuccess(QBSession result, Bundle params) {
                 // session created
                 user.setId(result.getUserId());
-                Log.d("ID",""+result.getUserId());
-
                 chatService = QBChatService.getInstance();
                 chatService.startAutoSendPresence(10);
-
                 // LOG IN CHAT SERVICE
-                if (!chatService.isLoggedIn())
-                {
+                if (!chatService.isLoggedIn()) {
                     chatService.login(user, new QBEntityCallback<QBUser>() {
                         @Override
                         public void onSuccess(QBUser qbUser, Bundle args) {
                             Log.e("$$$$$$$$$$$$", "loged chat");
-                            Toast.makeText(getApplicationContext(), "Logged in", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "Logged in", Toast.LENGTH_SHORT).show();
                         }
 
                         @Override
                         public void onError(QBResponseException errors) {
                             Log.e("$$$$$$$$$$$", "not loged\n" + errors.getMessage());
-                            Toast.makeText(getApplicationContext(), "Fail " + errors, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "Fail " + errors, Toast.LENGTH_SHORT).show();
                             //error
                         }
                     });
                 }
+
                 loginForQuickBlox(QBuser);
+
             }
 
             @Override
             public void onError(QBResponseException responseException) {
-                Toast.makeText(getActivity(), "Error :" + responseException.toString(), Toast.LENGTH_SHORT).show();
-                Toast.makeText(getActivity(), "Session not created, please try again.", Toast.LENGTH_SHORT).show();
-//              createSession(QBuser);
-                //pd.setVisibility(View.GONE);
 
-            }
+                Toast.makeText(getActivity(), "Session not created, please try again.", Toast.LENGTH_SHORT).show();
+//                createSession(QBuser);
+                //.setVisibility(View.GONE);
+            }//                Toast.makeText(getActivity(), "Eror :" + responseException.toString(), Toast.LENGTH_SHORT).show();
         });
 
     }
+  /*  @Override
+    public void onClick(View v) {
+        Intent intent = new Intent(getActivity(), PrivateChat.class);
+        startActivity(intent);
+    }*/
+
+
     private boolean loginForQuickBlox(final QBUser user) {
         QBUsers.signIn(user).performAsync(new QBEntityCallback<QBUser>() {
             @Override
@@ -234,9 +202,8 @@ public class ArtGalleryFragment extends android.support.v4.app.Fragment implemen
                 userData.setEmail(uNameStr);
                 userData.setPassword(uPwdStr);
                 userData.setId(qbUser.getId());
-
-                Log.e("UID "," ##### "+qbUser.getId());
-                utils.WriteSharePrefrence(getActivity(), Constant.KEY_QB_USERID, "" + qbUser.getId());
+                Log.e("UID ", " ##### " + qbUser.getId());
+                Utils.WriteSharePrefrence(getActivity(), Constant.KEY_QB_USERID, "" + qbUser.getId());
                 Log.e("USER", "******** USER DETAILS **********");
                 Log.e("ID", "" + qbUser.getId());
                 Log.e("LoginId", "" + qbUser.getLogin());
@@ -250,11 +217,12 @@ public class ArtGalleryFragment extends android.support.v4.app.Fragment implemen
                 QBUsers.getUsers(pagedRequestBuilder, bundle).performAsync(new QBEntityCallback<ArrayList<QBUser>>() {
                     @Override
                     public void onSuccess(ArrayList<QBUser> users, Bundle bundle) {
-//                        Toast.makeText(getActivity(), "DATA", Toast.LENGTH_LONG).show();
+
+                        //      Toast.makeText(getActivity(), "DATA", Toast.LENGTH_LONG).show();
                         int totalEntries = bundle.getInt("total_entries");
                         ArrayList<QBUser> arrySelectedUser = new ArrayList<QBUser>();
                         for (int i = 0; i < bundle.size(); i++) {
-                            if (!utils.ReadSharePrefrence(getApplicationContext(), Constant.Email).equalsIgnoreCase(users.get(i).getEmail()) && !users.get(i).getEmail().equalsIgnoreCase("piccitipics@gmail.com")){
+                            if (!Utils.ReadSharePrefrence(getActivity(), Constant.Email).equalsIgnoreCase(users.get(i).getEmail()) && !users.get(i).getEmail().equalsIgnoreCase("piccitipics@gmail.com")) {
                                 Log.e(">>>>>>>>> ", "=========== USERS ============" + i);
                                 Log.e("ID", "" + users.get(i).getId());
                                 Log.e("NAME", "" + users.get(i).getFullName());
@@ -264,16 +232,16 @@ public class ArtGalleryFragment extends android.support.v4.app.Fragment implemen
                             }
                         }
 
-                       /* adapter = new ChatUserListAdapter(getActivity(), arrySelectedUser);
+                       /*adapter = new ChatUserListAdapter(getActivity(), arrySelectedUser);
                         lvContacts.setAdapter(adapter);
-                        adapter.notifyDataSetChanged();
-                        pd.setVisibility(View.GONE);*/
+                        adapter.notifyDataSetChanged();*/
+                        //.setVisibility(View.GONE);
                     }
 
                     @Override
                     public void onError(QBResponseException e) {
                         Toast.makeText(getActivity(), "ERR " + e, Toast.LENGTH_SHORT);
-                       // pd.setVisibility(View.GONE);
+                        //.setVisibility(View.GONE);
                     }
                 });
 
@@ -307,20 +275,22 @@ public class ArtGalleryFragment extends android.support.v4.app.Fragment implemen
                                         Log.e("RECEIPNT_ID", "" + result.get(i).getRecipientId());
                                         // ADD Record TO the List
                                         arrySelectedUserChat.add(result.get(i));
+//                                    }
+//                                }
 
                                     }
                                 }
-                              /*  if (arrySelectedUserChat.size() > 0) {
-                                    adapterChats = new ChatListQBAdapter(getActivity(), arrySelectedUserChat);
+                                if (arrySelectedUserChat.size() > 0) {
+                                   /*adapterChats = new ChatListQBAdapter(getActivity(), arrySelectedUserChat);
                                     lvChats.setAdapter(adapterChats);
-                                    adapterChats.notifyDataSetChanged();
+                                    adapterChats.notifyDataSetChanged();*/
                                 }
-                                pd.setVisibility(View.GONE);*/
+                                //.setVisibility(View.GONE);
                             }
 
                             @Override
                             public void onError(QBResponseException responseException) {
-                               // pd.setVisibility(View.GONE);
+                                //.setVisibility(View.GONE);
                             }
                         });
 
@@ -330,16 +300,16 @@ public class ArtGalleryFragment extends android.support.v4.app.Fragment implemen
             @Override
             public void onError(QBResponseException e) {
                 Toast.makeText(getActivity(), "Exception " + e, Toast.LENGTH_SHORT).show();
-               // pd.setVisibility(View.GONE);
+                //.setVisibility(View.GONE);
             }
         });
 
         return true;
     }
 
-
     private void init(View view) {
-
+        new getUploadedImage().execute();
+        new getCategory().execute();
     }
 
 
@@ -369,51 +339,39 @@ public class ArtGalleryFragment extends android.support.v4.app.Fragment implemen
 
                 break;
 
-           /* case R.id.spCategory:
+            case R.id.ivSearchArtGallery:
 
+                if (filterCategoryNameArray != null) {
+                    filterCategoryNameArray.clear();
+                }
 
+                if (selectedCategoryList.equalsIgnoreCase("all")) {
+
+                    artGalleryAdapter = new ArtGalleryAdapter(getActivity(), artGalleryArrayList);
+                    artPhotoGridView.setAdapter(artGalleryAdapter);
+                    artGalleryAdapter.notifyDataSetChanged();
+                    Log.d("msg", "filter if" + artGalleryArrayList.size());
+
+                } else {
+
+                    Log.d("msg", "filter else " + filterCategoryNameArray.toString());
+
+                    for (int i = 0; i < artGalleryArrayList.size(); i++) {
+                        String name = artGalleryArrayList.get(i).getCategory();
+                        if (selectedCategoryList.equalsIgnoreCase(name)) {
+                            filterCategoryNameArray.add(artGalleryArrayList.get(i));
+                        }
+                    }
+
+                    artGalleryAdapter = new ArtGalleryAdapter(getActivity(), filterCategoryNameArray);
+                    artPhotoGridView.setAdapter(artGalleryAdapter);
+                    artGalleryAdapter.notifyDataSetChanged();
+                }
                 Log.d("msg", "filter " + filterCategoryNameArray.toString());
-                break;*/
+                break;
         }
     }
 
-
-
-    /*@Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1 && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            Uri uri = data.getData();
-            try {
-                bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), uri);
-                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.PNG, 40, byteArrayOutputStream);
-                byte[] byteArray = byteArrayOutputStream.toByteArray();
-                strSelectedImage = Base64.encodeToString(byteArray, Base64.DEFAULT);
-                dialogCaptureImage.setImageBitmap(bitmap);
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }*/
-
-    /*private String getPath(Uri uri) {
-        String result;
-        Cursor cursor = getActivity().getContentResolver().query(uri, null, null, null, null);
-        if (cursor == null) {
-            result = uri.getPath();
-        } else {
-
-            int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
-            cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-            cursor.moveToFirst();
-            result = cursor.getString(idx);
-            cursor.close();
-        }
-        return result;
-
-    }*/
 
     public class getCategory extends AsyncTask<String, String, String> {
         public ProgressDialog progressDialog;
@@ -462,9 +420,9 @@ public class ArtGalleryFragment extends android.support.v4.app.Fragment implemen
 
 
                     ArrayAdapter<String> spnerCategoryadapter = new ArrayAdapter<String>(getActivity(), R.layout.spinner_item_view, categoryNameArry);
-                    spCategory.setAdapter(spnerCategoryadapter);
+                    spnerCategory.setAdapter(spnerCategoryadapter);
 
-                    spCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    spnerCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                         @Override
                         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                             selectedCategoryList = categoryNameArry.get(position);
@@ -574,7 +532,7 @@ public class ArtGalleryFragment extends android.support.v4.app.Fragment implemen
                         artGallery.setImage(object.getString("image"));
                         artGallery.setPrice(object.getString("price"));
                         artGallery.setDescription(object.getString("description"));
-                      //  artGallery.setLocation(object.getString("location"));
+                        //  artGallery.setLocation(object.getString("location"));
                         artGallery.setUsername(object.getString("user_name"));
                         artGallery.setName(object.getString("name"));
                         artGallery.setUserId(object.getString("user_id"));

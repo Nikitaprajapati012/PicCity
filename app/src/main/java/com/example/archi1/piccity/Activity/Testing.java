@@ -24,10 +24,6 @@ public class Testing extends AppCompatActivity implements View.OnClickListener {
     public TextView tvProductPrice;
 
 
-
-
-
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

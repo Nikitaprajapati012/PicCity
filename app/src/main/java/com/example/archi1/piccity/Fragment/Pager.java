@@ -1,12 +1,10 @@
 package com.example.archi1.piccity.Fragment;
 
-import android.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.example.archi1.piccity.OneFragment;
-import com.example.archi1.piccity.TwoFragment;
+import com.example.archi1.piccity.SecondFragment;
 
 /**
  * Created by archi on 03-Apr-17.
@@ -16,21 +14,7 @@ public class Pager extends FragmentStatePagerAdapter {
     //integer to count number of tabs
     int tabCount;
 
-    //Constructor to the class
-   /* public Pager(FragmentManager fm, int tabCount) {
-        super(fm);
 
-        //Initializing tab count
-        this.tabCount= tabCount;
-    }*/
-
-    /*public Pager(FragmentActivity fm, int tabCount) {
-
-        super(fm);
-        //Initializing tab count
-        this.tabCount= tabCount;
-    }
-*/
     public Pager(FragmentManager supportFragmentManager, int tabCount) {
         super(supportFragmentManager);
         //Initializing tab count
@@ -47,7 +31,7 @@ public class Pager extends FragmentStatePagerAdapter {
                 OneFragment tab1 = new OneFragment();
                 return tab1;
             case 1:
-                TwoFragment tab2 = new TwoFragment();
+                SecondFragment tab2 = new SecondFragment();
                 return tab2;
             default:
                 return null;
