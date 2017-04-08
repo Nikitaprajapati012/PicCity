@@ -155,6 +155,7 @@ public class ChatActivity extends AppCompatActivity {
 
                     JSONObject jsonObject = new JSONObject(s);
                     if (jsonObject.getString("status").equalsIgnoreCase("true")) {
+
                         Toast.makeText(ChatActivity.this, "Message Sent", Toast.LENGTH_SHORT).show();
 
                         MessageDetails details = new MessageDetails();

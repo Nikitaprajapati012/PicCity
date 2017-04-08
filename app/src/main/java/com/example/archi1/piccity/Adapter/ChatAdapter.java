@@ -41,7 +41,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         if (chatArray.get(position).getSender().equalsIgnoreCase(Utils.ReadSharePrefrence(context, Constant.USER_ID))) {
             return RECEIVERVIEW;
         } else {
-            return SENDERVIEW ;
+            return SENDERVIEW;
         }
     }
 

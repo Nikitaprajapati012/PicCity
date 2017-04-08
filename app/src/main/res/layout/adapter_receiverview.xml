@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginRight="@dimen/_15sdp"
-    android:background="@drawable/bubble_odd_9"
+    android:background="@drawable/bubble1"
     android:orientation="vertical">
 
 
