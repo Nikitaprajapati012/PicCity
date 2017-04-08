@@ -3,6 +3,7 @@ package com.example.archi1.piccity.Activity;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.DownloadManager;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -31,7 +32,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.archi1.piccity.Chat.AlistChat;
+
 import com.example.archi1.piccity.Constant.Constant;
 import com.example.archi1.piccity.Constant.Utils;
 import com.example.archi1.piccity.Fragment.ArtGalleryFragment;
@@ -57,14 +58,11 @@ import java.util.List;
 public class ArtGalleryDetailsActivity extends AppCompatActivity implements View.OnClickListener {
 
     public Utils utils;
-    public RelativeLayout relativeImagelayout;
     public ImageView imageView, ivMessage, ivInfo;
     public ImageView header_product_iv_back;
     public TextView txtName, txtPrice;
     public String imgID, imgPrice, imgPath, imgDescription, imgLocation, name, username, userid;
-    public TextView txtProductMoreInfo, txtProductShare;
     private Bitmap rotatedBitmap;
-    private TextView tvDescription;
     public PayPalPayment payment;
     private static PayPalConfiguration config = new PayPalConfiguration()
             .environment(PayPalConfiguration.ENVIRONMENT_SANDBOX)
@@ -96,7 +94,7 @@ public class ArtGalleryDetailsActivity extends AppCompatActivity implements View
         ImageView ivEdit = (ImageView) findViewById(R.id.ivEdit);
         ivMessage = (ImageView) findViewById(R.id.header_alist_share);
         ivInfo = (ImageView) findViewById(R.id.header_alist_info);
-        header_product_iv_back = (ImageView)findViewById(R.id.header_product_iv_back);
+        header_product_iv_back = (ImageView) findViewById(R.id.header_product_iv_back);
 
         ivEdit.setOnClickListener(this);
         String useridd = Utils.ReadSharePrefrence(ArtGalleryDetailsActivity.this, Constant.USER_ID);
@@ -116,23 +114,22 @@ public class ArtGalleryDetailsActivity extends AppCompatActivity implements View
 
         }
 
-        if(btnContact.getText().toString().equalsIgnoreCase("Make as Sold"))
-        {
+        if (btnContact.getText().toString().equalsIgnoreCase("Make as Sold")) {
             btnContact.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     SoldProduct();
                 }
             });
-        }
-        else
-        {
+        } else {
             btnContact.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Intent intent_msg = new Intent(ArtGalleryDetailsActivity.this, ChatActivity.class);
+                    intent_msg.putExtra("user_id",userid);
+                    startActivity(intent_msg);
                     Toast.makeText(ArtGalleryDetailsActivity.this, "Hii...", Toast.LENGTH_SHORT).show();
-                    Intent chatIntent = new Intent(ArtGalleryDetailsActivity.this,AlistChat.class);
-                    startActivity(chatIntent);
+
                 }
             });
         }
@@ -155,8 +152,9 @@ public class ArtGalleryDetailsActivity extends AppCompatActivity implements View
             userid = getIntent().getExtras().getString("userid");
             String currency = getIntent().getExtras().getString("currency");
             imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-          //Picasso.with(getApplicationContext()).load(imgPath).placeholder(R.drawable.ic_placeholder).into(imageView);
+            //Picasso.with(getApplicationContext()).load(imgPath).placeholder(R.drawable.ic_placeholder).into(imageView);
 
+            Toast.makeText(this, "" + userid, Toast.LENGTH_SHORT).show();
             txtName.setText("Name: " + name);
             //tvDescription.setText("Description : " + imgDescription);
             txtPrice.setText("Price: " + imgPrice + " " + currency);
@@ -170,22 +168,12 @@ public class ArtGalleryDetailsActivity extends AppCompatActivity implements View
             @Override
             public void onClick(View v) {
                 onBackPressed();
-                /*Intent i = new Intent(ArtGalleryDetailsActivity.this,ArtGalleryFragment.class);
-                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(i);*/
+
             }
         });
-        //txtProductMoreInfo.setOnClickListener(this);
     }
 
     public void onBuyPressed(View v) {
-
-        // PAYMENT_INTENT_SALE will cause the payment to complete immediately.
-        // Change PAYMENT_INTENT_SALE to
-        //   - PAYMENT_INTENT_AUTHORIZE to only authorize payment and capture funds later.
-        //   - PAYMENT_INTENT_ORDER to create a payment for authorization and capture
-        //     later via calls from your server.
-
 
         payment = new PayPalPayment(new BigDecimal(amountGalleryImage), "USD", "Say Post",
                 PayPalPayment.PAYMENT_INTENT_SALE);
@@ -215,10 +203,6 @@ public class ArtGalleryDetailsActivity extends AppCompatActivity implements View
                 break;
 
             case R.id.header_alist_info:
-                //            ivProductClose.setVisibility(View.GONE);
-                //            txtProductMoreInfo.setVisibility(View.GONE);
-                //            txtProductShare.setVisibility(View.GONE);
-
 
                 dialog = new Dialog(ArtGalleryDetailsActivity.this);
 
@@ -280,7 +264,6 @@ public class ArtGalleryDetailsActivity extends AppCompatActivity implements View
                         dialog.dismiss();
                     }
                 });
-
 
                 dialog.show();
 
@@ -381,6 +364,43 @@ public class ArtGalleryDetailsActivity extends AppCompatActivity implements View
                 });
     }
 
+    class DeleteImageRecord extends AsyncTask<String, String, String> {
+        private ProgressDialog pd;
+
+        @Override
+        protected void onPreExecute() {
+            pd = new ProgressDialog(ArtGalleryDetailsActivity.this);
+            pd.setMessage("Please Wait...");
+            pd.setCancelable(false);
+            pd.show();
+            super.onPreExecute();
+        }
+
+
+        @Override
+        protected String doInBackground(String... params) {
+            String delteurl = Constant.Base_URL + "delete_alluser_image.php?id=" + imgID;
+
+            return Utils.getResponseofGet(delteurl);
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            Log.d("POST",""+s);
+            try {
+                JSONObject jsonObject = new JSONObject(s);
+                if (jsonObject.getString("status").equalsIgnoreCase("true")) {
+
+                } else {
+
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            super.onPostExecute(s);
+        }
+    }
+
     class RotateBitmappAsy extends AsyncTask<Void, Void, String> {
 
         @Override
@@ -433,10 +453,10 @@ public class ArtGalleryDetailsActivity extends AppCompatActivity implements View
 
             try {
                 Log.d("msg", "detial activity img path " + imgPath);
-                    URL url = new URL(imgPath);
-                    Bitmap image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                URL url = new URL(imgPath);
+                Bitmap image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
 
-                    rotatedBitmap = RotateBitmap(image, 90f);
+                rotatedBitmap = RotateBitmap(image, 90f);
                 Log.d("msg", "rotatedBitmap   " + rotatedBitmap);
 
 
@@ -602,7 +622,9 @@ public class ArtGalleryDetailsActivity extends AppCompatActivity implements View
 
                     JSONObject jsonObject = new JSONObject(Respond);
                     JSONObject main = jsonObject.getJSONObject("response");
-
+                    final String transactionId = jsonObject.getJSONObject("response").getString("id");
+                    Log.d("transactionId", transactionId);
+                    new DeleteImageRecord().execute();
                     if (main.getString("state").equalsIgnoreCase("approved")) {
                         File direct = new File(Environment.getExternalStorageDirectory() + "/Camera");
                         if (!direct.exists()) {

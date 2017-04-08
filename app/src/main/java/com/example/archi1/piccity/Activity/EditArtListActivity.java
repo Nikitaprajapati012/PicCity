@@ -418,7 +418,7 @@ public class EditArtListActivity extends AppCompatActivity implements View.OnCli
 /*
         http://web-medico.com/web1/pic_citi/Api/delete_user_upload.php?id=2&user_id=25
 */
-        Log.d("msg", "img id   " + imgID + "    user id " + Utils.ReadSharePrefrence(EditArtListActivity.this, Constant.UserId));
+        Log.d("msg", "img id   " + imgID + "user id " + Utils.ReadSharePrefrence(EditArtListActivity.this, Constant.UserId));
         Ion.with(getApplicationContext())
                 .load(Constant.Base_URL + "delete_user_upload.php?")
                 .setMultipartParameter("id", imgID)

@@ -19,12 +19,15 @@ public class Constant {
     public static final String CLIENT_ID = "AWuRa4dpStkz11pJBwAXn5Mmoch9AGl_IcALFwQ6Xj5BXrHoVyvbRN3X5T9Q_W9cgC_PMOr0HOL31Lv5";
     public static final String USER_PASS = "pwd";
 
-    public static String APP_ID = "55390";
-    public static String AUTH_KEY = "XHHqLmzhRO3n2OD";
-    public static String AUTH_SECRET = "Tm2KpqUnznZJRcu";
-    public static String ACCOUNT_KEY = "BzzWHLbVhhNGHM9yXeND";
+    public static String APP_ID = "51157";
+    public static String AUTH_KEY = "df6dgEVManXAFF8";
+    public static String AUTH_SECRET = "kZafy-njAqDeOyw";
+    public static String ACCOUNT_KEY = "359qskXB6qzWMWeqUKNj";
     public static final String ChatId = "chatId";
 
     public static final String KEY_QB_USERID = "qb_userid";
     public static final String KEY_USER_CHAT_ID = "user_chat_id";
+
+    public static final int MESSAGE_MIN_LENGTH = 0;
+    public static final int MESSAGE_MAX_LENGTH = 100;
 }

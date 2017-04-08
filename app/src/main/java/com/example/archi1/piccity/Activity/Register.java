@@ -18,7 +18,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.example.archi1.piccity.Chat.ChatUtils;
 import com.example.archi1.piccity.Constant.Constant;
 import com.example.archi1.piccity.Constant.Utils;
 import com.example.archi1.piccity.R;
@@ -177,9 +176,10 @@ public class Register extends AppCompatActivity {
                 if (object.getString("successful").equalsIgnoreCase("true")) {
                     String login_id = object.getString("id");
                     Toast.makeText(Register.this, object.getString("msg"), Toast.LENGTH_SHORT).show();
-                    ChatUtils chatUtils = new ChatUtils(Register.this);
-                    chatUtils.ChatRegister(Register.this, strName, login_id, strEmail, strPassword);
+                  /*  ChatUtils chatUtils = new ChatUtils(Register.this);
+                    chatUtils.ChatRegister(Register.this, login_id,strName, strEmail, strPassword);
                     Toast.makeText(Register.this, ""+login_id, Toast.LENGTH_SHORT).show();
+                   */
                     Intent i = new Intent(Register.this, LoginActivity.class);
                     startActivity(i);
                 } else {

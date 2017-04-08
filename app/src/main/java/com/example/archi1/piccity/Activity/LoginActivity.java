@@ -103,6 +103,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         @Override
         protected String doInBackground(String... params) {
             // String URL = "http://web-medico.com/web1/pic_citi/Api/login.php?email=" + email + "&password=" + password;
+
             String Url = Constant.Base_URL+"login.php?email="+ strEmail +"&password=" +strPassword;
             return utils.MakeServiceCall(Url);
         }
@@ -122,7 +123,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     Utils.WriteSharePrefrence(LoginActivity.this,Constant.Email,object.getString("email"));
                     Utils.WriteSharePrefrence(LoginActivity.this,Constant.Mobile,object.getString("phone"));
                     Utils.WriteSharePrefrence(LoginActivity.this,Constant.Image,object.getString("image"));
-                    Utils.WriteSharePrefrence(LoginActivity.this,Constant.USER_PASS,object.getString("password"));
+                    Utils.WriteSharePrefrence(LoginActivity.this,Constant.USER_PASS,strPassword);
                     Log.d("id", String.valueOf(object.getInt("id")));
                     Log.d("user",object.getString("password"));
 

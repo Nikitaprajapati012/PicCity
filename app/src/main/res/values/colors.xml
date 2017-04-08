@@ -30,6 +30,7 @@
     <color name="wpn">#537BBB</color>
     <color name="graytextcolor">#537BBB</color>
     <color name="toolBarPink">#8d2086</color>
+    <color name="lightpinkbackground">#f5f0f7</color>
 
 
     <!--<resources>

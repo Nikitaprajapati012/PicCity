@@ -40,6 +40,7 @@ import com.example.archi1.piccity.Model.GalleryDetails;
 import com.example.archi1.piccity.Model.MyGalleryModel;
 import com.example.archi1.piccity.R;
 import com.google.android.gms.vision.text.Text;
+import com.paypal.android.sdk.m;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
@@ -66,7 +67,7 @@ public class MyGalleryAdapter extends BaseAdapter {
     private ImageView ivOption;
     private TextView tvImageName;
     private Dialog dialog;
-    private String strImage,strImageId,strImageName;
+    private String strImage, strImageId, strImageName;
     private Bitmap rotatedBitmap;
 
 
@@ -108,8 +109,8 @@ public class MyGalleryAdapter extends BaseAdapter {
 
             MyGalleryModel album = galleryDetailsList.get(position);
             strImage = galleryDetailsList.get(position).getImg();
-            strImageId=galleryDetailsList.get(position).getId();
-            strImageName=galleryDetailsList.get(position).getName();
+            strImageId = galleryDetailsList.get(position).getId();
+            strImageName = galleryDetailsList.get(position).getName();
 
             Log.d("img", strImage);
             Picasso.with(mContext).load(mygallerymodel.getImg()).placeholder(R.drawable.ic_placeholder).into(ivSetImage);
@@ -142,8 +143,8 @@ public class MyGalleryAdapter extends BaseAdapter {
 
                     smsIntent.setData(Uri.parse("smsto:"));
                     smsIntent.setType("vnd.android-dir/mms-sms");
-                    smsIntent.putExtra("address", new String("01234"));
-                    smsIntent.putExtra("sms_body", "Test ");
+                    smsIntent.putExtra("address", "");
+                    smsIntent.putExtra("sms_body", "");
 
                     try {
                         mContext.startActivity(smsIntent);
@@ -155,36 +156,12 @@ public class MyGalleryAdapter extends BaseAdapter {
                     }
                     Toast.makeText(mContext, "send my gallery", Toast.LENGTH_SHORT).show();
                     break;
-
-
                 case R.id.adapter_share_fb:
 
-
-               /*   Intent intent = new Intent(Intent.ACTION_SEND);
-                    String path = null;
-
-                    try {
-                        path = MediaStore.Images.Media.insertImage(mContext.getContentResolver(), strImage, "", null);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-
-                    Uri screenshotUri = Uri.parse(path);
-                    intent.putExtra(Intent.EXTRA_STREAM, screenshotUri);
-                    intent.setType("image*//*");
-                    intent.setPackage("com.facebook.katana");
-                    mContext.startActivity(Intent.createChooser(intent, "Share image via..."));
-*/
-
-                   /* Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                    Intent shareIntent = new Intent(Intent.ACTION_SEND);
                     shareIntent.setType("text/plain");
                     Intent chooserIntent = Intent.createChooser(shareIntent, "Share Image via");
 
-                    // for 21+, we can use EXTRA_REPLACEMENT_EXTRAS to support the specific case of Facebook
-                    // (only supports a link)
-                    // >=21: facebook=link, other=text+link
-                    // <=20: all=link
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         shareIntent.putExtra(Intent.EXTRA_TEXT, "Hello...." + " " + strImage);
                         Bundle facebookBundle = new Bundle();
@@ -197,32 +174,16 @@ public class MyGalleryAdapter extends BaseAdapter {
                     }
 
                     chooserIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    mContext.startActivity(chooserIntent);*/
-
-
-                    Intent intent = new Intent();
-                    intent.setAction(Intent.ACTION_SEND);
-                    intent.setType("image/*");
-
-                    intent.putExtra(Intent.EXTRA_TEXT, "eample");
-                    intent.putExtra(Intent.EXTRA_TITLE, "example");
-                    intent.putExtra(Intent.EXTRA_SUBJECT, "example");
-                    intent.putExtra(Intent.EXTRA_STREAM, strImage);
-                    intent.setPackage("com.facebook.katana");
-                    Intent openInChooser = new Intent(intent);
-
-                  //  openInChooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, extraIntents);
-                    mContext.startActivity(intent);
-
+                    mContext.startActivity(chooserIntent);
                     break;
 
 
                 case R.id.canvas_image:
 
-                Intent i =new Intent(mContext, Canvas_MyGallery_Pics.class);
-                    i.putExtra("Id",strImageId);
-                    i.putExtra("Image",strImage);
-                    i.putExtra("ImageName",strImageName);
+                    Intent i = new Intent(mContext, Canvas_MyGallery_Pics.class);
+                    i.putExtra("Id", strImageId);
+                    i.putExtra("Image", strImage);
+                    i.putExtra("ImageName", strImageName);
 
                     mContext.startActivity(i);
                 default:

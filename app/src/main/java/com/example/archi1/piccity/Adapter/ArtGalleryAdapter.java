@@ -68,20 +68,13 @@ public class ArtGalleryAdapter extends BaseAdapter {
         final String currency=artGalleryArrayList.get(position).getCurrency();
 
         final ImageView artImage = (ImageView) convertView.findViewById(R.id.iv_art_image);
-        //TextView tvImgPrice = (TextView)convertView.findViewById(R.id.tv_image_price);
         TextView tvImageTitle = (TextView) convertView.findViewById(R.id.tv_image_title);
-        // TextView tvImgLctn = (TextView)convertView.findViewById(R.id.tv_image_location);
-
-        //tvImgPrice.setText(artGalleryArrayList.get(position).getPrice());
         tvImageTitle.setText(album.getName());
+
         if(!artGalleryArrayList.get(position).getImage().equalsIgnoreCase("")) {
             Glide.with(context).load(artGalleryArrayList.get(position).getImage()).placeholder(R.drawable.ic_placeholder).into(artImage);
         }
-      //  Glide.with(context).load(album.getImage()).placeholder(R.drawable.ic_placeholder).into(artImage);
         Log.d("mobile",album.getImage());
-        //tvImgLctn.setText(artGalleryArrayList.get(position).getLocation());
-        //Picasso.with(context).load(artGalleryArrayList.get(position).getImage()).placeholder(R.drawable.ic_placeholder).into(artImage);
-
 
         artImage.setOnClickListener(new View.OnClickListener() {
             @Override
