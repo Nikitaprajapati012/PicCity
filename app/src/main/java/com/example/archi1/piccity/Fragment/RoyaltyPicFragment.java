@@ -39,6 +39,7 @@ public class RoyaltyPicFragment extends Fragment implements View.OnClickListener
     public EditText searchRoyaltyImageEdt;
     public String userId;
     public LinearLayout royaltyPicUploadlayout;
+    private RoyaltyPicGallery details;
 
 
     @Override
@@ -71,9 +72,7 @@ public class RoyaltyPicFragment extends Fragment implements View.OnClickListener
                 searchedArraylist = new ArrayList<>();
                 for (int i = 0; i < royaltyPicGalleryArrayList.size(); i++) {
                     if (royaltyPicGalleryArrayList.get(i).getName().toLowerCase().contains(s.toString().toLowerCase())) {
-
                         searchedArraylist.add(royaltyPicGalleryArrayList.get(i));
-
                     }
                 }
 
@@ -84,22 +83,20 @@ public class RoyaltyPicFragment extends Fragment implements View.OnClickListener
         return view;
     }
 
-
     private void init(View view) {
         searchRoyaltyImageEdt = (EditText) view.findViewById(R.id.fragment_royalty_search);
         royaltyPhotoGridView = (GridView) view.findViewById(R.id.fragment_royalty_gridview);
         royaltyPicUploadlayout = (LinearLayout) view.findViewById(R.id.fragment_royalty_gallery_ll_camera);
         royaltyPicUploadlayout.setOnClickListener(this);
-
-
     }
 
     @Override
     public void onResume() {
-       // getActivity().setTitle(R.string.art_list);
         super.onResume();
-        //((Activity) getActivity()).setTitle(R.string.royalty);
+        getActivity().setTitle(R.string.royalty);
+
     }
+
 
     @Override
     public void onClick(View v) {
@@ -139,14 +136,9 @@ public class RoyaltyPicFragment extends Fragment implements View.OnClickListener
 
         @Override
         protected String doInBackground(String... params) {
-
-/*
-            http://web-medico.com/web1/pic_citi/Api/get_royalty_pic_list.php?user_id=25
-*/
-
-
+//            http://web-medico.com/web1/pic_citi/Api/get_royalty_pic_list.php?user_id=25
             String Url = Constant.Base_URL + "get_royalty_pic_list.php";
-            Log.d("royality url ", Url);
+            Log.d("royality url", Url);
             Log.d("Username", userId);
             return utils.MakeServiceCall(Url);
         }
@@ -156,26 +148,22 @@ public class RoyaltyPicFragment extends Fragment implements View.OnClickListener
             super.onPostExecute(s);
             try {
                 JSONObject jsonObject = new JSONObject(s);
-
                 if (jsonObject.getString("status").equalsIgnoreCase("true")) {
                     JSONArray jsonArray = jsonObject.getJSONArray("data");
-
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject object = jsonArray.getJSONObject(i);
-                        RoyaltyPicGallery royaltyPicGallery = new RoyaltyPicGallery();
-                        royaltyPicGallery.setId(object.getString("id"));
-                        royaltyPicGallery.setImage(object.getString("image_url"));
-                        royaltyPicGallery.setUserid(object.getString("user_id"));
-                        royaltyPicGallery.setName(object.getString("name"));
-                        royaltyPicGallery.setUser_profile(object.getString("user_image"));
-                        royaltyPicGalleryArrayList.add(royaltyPicGallery);
-
-                        Log.d("image", (object.getString("image_url")));
+                        details = new RoyaltyPicGallery();
+                        details.setId(object.getString("id"));
+                        details.setImage(object.getString("watermarkimage"));
+                        details.setUserid(object.getString("user_id"));
+                        details.setName(object.getString("name"));
+                        details.setPaypal_email(object.getString("paypal_email"));
+                        details.setUser_profile(object.getString("profile_pic"));
+                        royaltyPicGalleryArrayList.add(details);
+                        Log.d("image", (object.getString("paypal_email")));
                     }
-
                     royaltyPicAdapter = new RoyaltyPicAdapter(getActivity(), royaltyPicGalleryArrayList);
                     royaltyPhotoGridView.setAdapter(royaltyPicAdapter);
-
                 }
             } catch (JSONException e) {
                 e.printStackTrace();

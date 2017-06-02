@@ -6,8 +6,19 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
     <include layout="@layout/header"/>
+    </RelativeLayout>
 
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="match_parent">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/_150sdp">
@@ -16,7 +27,10 @@
             android:id="@+id/activity_glry_iv_header"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/_3sdp"
+            android:layout_marginBottom="@dimen/_3sdp"
             android:scaleType="fitXY"
+            android:layout_margin="@dimen/_5sdp"
             android:src="@drawable/ic_placeholder" />
     </RelativeLayout>
 
@@ -46,50 +60,49 @@
                 android:layout_margin="@dimen/_5sdp"
                 android:orientation="vertical"
                 android:background="#f5f0f7"
-                android:weightSum="9">
+                android:weightSum="5">
 
                 <Button
                     android:id="@+id/activity_gallery_detail_send_my_gallery"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:layout_marginTop="@dimen/_5sdp"
                     android:background="#A9D041"
-                    android:text="Send to My Gallery"
+                    android:text="@string/send_to_my_gallery"
                     android:textAllCaps="false"
+                    android:layout_margin="@dimen/_5sdp"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/_18sdp"/>
+                    android:textSize="@dimen/_15sdp"/>
                 <Button
                     android:id="@+id/activity_gallery_detail_paste_me"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_margin="@dimen/_5sdp"
                     android:background="#A9D041"
-                    android:text="Paste Me"
+                    android:text="@string/paste_me"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/_18sdp"
+                    android:textSize="@dimen/_15sdp"
                     />
                 <Button
                     android:id="@+id/activity_gallery_detail_canvas_pic"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_margin="@dimen/_5sdp"
                     android:background="#A9D041"
-                    android:text="Canvas Pic"
+                    android:text="@string/canvas_pic"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/_18sdp"
+                    android:textSize="@dimen/_15sdp"
                     />
 
-
-
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:id="@+id/activity_gallery_detail_sizeprice_layout"
-                    android:layout_height="@dimen/_100sdp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
                     android:layout_marginTop="@dimen/_3sdp"
                     android:visibility="invisible"
                     >
@@ -109,7 +122,7 @@
                         android:layout_below="@+id/activity_glry_img_title"
                         android:layout_marginLeft="@dimen/_6sdp"
                         android:layout_marginTop="@dimen/_19sdp"
-                        android:padding="@dimen/_4sdp"></Spinner>
+                        android:padding="@dimen/_4sdp"/>
 
                     <TextView
                         android:id="@+id/activity_glry_img_price"
@@ -121,15 +134,14 @@
                         android:layout_toRightOf="@+id/activity_glry_size_spinner"
                         android:text="Price:"
                         android:textSize="@dimen/_19sdp" />
-
-
-                </RelativeLayout>
+                </LinearLayout>
 
 
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:visibility="invisible">
 
                     <Button
@@ -142,26 +154,9 @@
                         android:textColor="@color/accent_color"
                         android:textSize="@dimen/_19sdp" />
                 </RelativeLayout>
-
             </LinearLayout>
-
         </FrameLayout>
     </android.support.v4.widget.NestedScrollView>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    </LinearLayout>
+</ScrollView>
 </LinearLayout>

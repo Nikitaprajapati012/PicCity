@@ -7,8 +7,24 @@ package com.example.archi1.piccity.Model;
 public class MyGalleryModel {
     private String id;
     private String name;
-    private String img;
-    private String price;
+    private String image;
+    private String price,canvasImage;
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public String getCanvasImage() {
+        return canvasImage;
+    }
+
+    public void setCanvasImage(String canvasImage) {
+        this.canvasImage = canvasImage;
+    }
 
     public String getId() {
         return id;
@@ -34,11 +50,11 @@ public class MyGalleryModel {
         this.price = price;
     }
 
-    public String getImg() {
-        return img;
+    public String getimage() {
+        return image;
     }
 
-    public void setImg(String img) {
-        this.img = img;
+    public void setimage(String img) {
+        this.image = img;
     }
 }

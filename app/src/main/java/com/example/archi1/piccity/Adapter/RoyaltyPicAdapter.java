@@ -25,6 +25,7 @@ import com.example.archi1.piccity.Constant.Utils;
 import com.example.archi1.piccity.Model.ArtGallery;
 import com.example.archi1.piccity.Model.RoyaltyPicGallery;
 import com.example.archi1.piccity.R;
+import com.google.gson.Gson;
 
 
 import org.json.JSONException;
@@ -74,13 +75,17 @@ public class RoyaltyPicAdapter extends BaseAdapter {
 
         convertView = inflater.inflate(R.layout.adapter_royalty_pic,null);
         utils = new Utils(context);
+        final RoyaltyPicGallery details =royaltyPicGalleryArrayList.get(position);
         String UserID = utils.ReadSharePrefrence(context, Constant.UserId);
         String UserNAme = utils.ReadSharePrefrence(context,Constant.Name);
         ImageView royaltyImage = (ImageView)convertView.findViewById(R.id.adapter_grid_item_royaltyimage);
+        ImageView deleteImage = (ImageView)convertView.findViewById(R.id.editImageView);
         TextView royaltyOwner = (TextView)convertView.findViewById(R.id.adapter_grid_item_royalty_owner);
         final ImageView royaltyEditImage = (ImageView)convertView.findViewById(R.id.editImageView);
-         royaltyEditImage.setVisibility(View.GONE);
 
+        royaltyImage.setScaleType(ImageView.ScaleType.FIT_CENTER);
+
+         royaltyEditImage.setVisibility(View.GONE);
 
          pos = royaltyPicGalleryArrayList.get(position).getId();
          final String strImage = royaltyPicGalleryArrayList.get(position).getImage();
@@ -97,7 +102,7 @@ public class RoyaltyPicAdapter extends BaseAdapter {
 
         if (UserID.equalsIgnoreCase(royaltyPicGalleryArrayList.get(position).getUserid())){
             royaltyEditImage.setVisibility(View.VISIBLE);
-            royaltyImage.setOnClickListener(new View.OnClickListener() {
+            deleteImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     final AlertDialog.Builder alert = new AlertDialog.Builder(context);
@@ -110,7 +115,6 @@ public class RoyaltyPicAdapter extends BaseAdapter {
 
                             positionarray=position;
                             new deleteRoyaltyImage().execute();
-
                         }
                     });
                     alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -128,14 +132,9 @@ public class RoyaltyPicAdapter extends BaseAdapter {
             royaltyImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    Gson gson=new Gson();
                     Intent i = new Intent(context, RoyaltyPicDetailsActivity.class);
-                    i.putExtra("id",pos);
-                    i.putExtra("user_id",royaltyPicGalleryArrayList.get(position).getUserid());
-                    i.putExtra("user_name",royaltyPicGalleryArrayList.get(position).getName());
-                    i.putExtra("user_image",royaltyPicGalleryArrayList.get(position).getUser_profile());
-                    i.putExtra("image",strImage);
-
+                    i.putExtra("rolaltyimagedetails",gson.toJson(details));
                     context.startActivity(i);
                 }
             });
@@ -172,7 +171,7 @@ public class RoyaltyPicAdapter extends BaseAdapter {
                 JSONObject object = new JSONObject(s);
 
                 if (object.getString("successful").equalsIgnoreCase("true")){
-                   royaltyPicGalleryArrayList.remove(positionarray);
+                    royaltyPicGalleryArrayList.remove(positionarray);
                     notifyDataSetChanged();
                     Toast.makeText(context, ""+object.getString("msg"), Toast.LENGTH_SHORT).show();
                 }else {
@@ -182,7 +181,6 @@ public class RoyaltyPicAdapter extends BaseAdapter {
                 e.printStackTrace();
             }
             pd.dismiss();
-
         }
     }
 }

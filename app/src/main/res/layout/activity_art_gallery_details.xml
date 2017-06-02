@@ -1,38 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                                 xmlns:app="http://schemas.android.com/apk/res-auto"
-                                                 xmlns:tools="http://schemas.android.com/tools"
-                                                 android:layout_width="match_parent"
-                                                 android:layout_height="match_parent"
-                                                 android:background="#f5f0f7"
-                                                 android:orientation="vertical">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f5f0f7"
+    android:orientation="vertical">
 
     <RelativeLayout
+        android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
         <include
             android:id="@+id/includeLayout"
-            layout="@layout/header_alist_detail"/>
+            layout="@layout/header_alist_detail" />
     </RelativeLayout>
 
-    <LinearLayout
+    <ScrollView
+        android:id="@+id/image_details"
+        android:layout_below="@+id/header"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/_48sdp"
-        android:orientation="vertical">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="305dp">
-
-            <ImageView
-                android:id="@+id/activity_art_gallery_details_image"
-                android:layout_width="match_parent"
-                android:layout_height="300dp"
-                android:src="@drawable/ic_placeholder"/>
-        </LinearLayout>
-
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -41,96 +27,140 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="32dp">
-                <TextView
-                    android:id="@+id/activity_art_gallery_details_txt_Name"
-                    android:layout_width="0dp"
-                    android:layout_weight="3"
-                    android:textColor="#ff4081"
-                    android:gravity="center"
-                    android:layout_height="match_parent"
-                    android:text="Name "
-                    android:textSize="@dimen/_10sdp"/>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="@dimen/_250sdp">
 
-                <TextView
-                    android:id="@+id/activity_art_gallery_details_txt_description"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:padding="@dimen/_10sdp"
-                    android:text="description"
-                    android:textColor="#ff4081"
-                    android:textSize="@dimen/_13sdp"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/activity_art_gallery_details_txt_price"
+                <ImageView
+                    android:id="@+id/activity_art_gallery_details_image"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/activity_art_gallery_details_txt_description"
-                    android:padding="@dimen/_10sdp"
-                    android:text="Price"
-                    android:textColor="#ff4081"
-                    android:textSize="@dimen/_13sdp"/>
-
+                    android:layout_margin="@dimen/_5sdp"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_placeholder"/>
             </LinearLayout>
 
+
             <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_margin="@dimen/_5sdp"
+                android:weightSum="4">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent">
+                    <TextView
+                        android:id="@+id/activity_art_gallery_details_txt_Name"
+                        android:layout_width="match_parent"
+                        android:textColor="#ff4081"
+                        android:gravity="center"
+                        android:layout_height="match_parent"
+                        android:text="@string/name"
+                        android:textSize="@dimen/_10sdp"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/activity_art_gallery_details_txt_description"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="description"
+                        android:textColor="#ff4081"
+                        android:textSize="@dimen/_13sdp" />
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/activity_art_gallery_details_txt_price"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="Price"
+                        android:textColor="#ff4081"
+                        android:textSize="@dimen/_13sdp"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:weightSum="2"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_weight="0.5"
+                        android:layout_height="match_parent">
+
+                        <Button
+                            android:id="@+id/btnContact"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/btn_shape"
+                            android:text="Chat With Priyanka"
+                            android:textColor="@color/white"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:layout_weight="1.5"
+                        android:orientation="horizontal"
+                        android:weightSum="1">
+
+                        <ImageView
+                            android:id="@+id/ivEdit"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.84"
+                            android:src="@drawable/edit"/>
+
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <RelativeLayout
+        android:layout_below="@id/image_details"
+        android:layout_width="match_parent"
+        android:layout_gravity="bottom"
+        android:gravity="bottom"
+        android:layout_alignParentBottom="true"
+        android:layout_height="wrap_content">
+
+        <!--<LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_40sdp"
+            android:orientation="horizontal"
+            android:weightSum="2">
+            <EditText
+                android:id="@+id/activity_art_gallery_details_edfeedback"
+                android:layout_width="match_parent"
+                android:textColor="#ff4081"
+                android:layout_gravity="center|top"
+                android:background="@drawable/send_msg_edittext"
+                android:layout_weight="0.3"
+                android:layout_height="@dimen/_40sdp"
+                android:hint="@string/feedback"
+                android:textSize="@dimen/_15sdp"/>
+
+            <ImageView
+                android:id="@+id/activity_art_gallery_details_imgfeedbacksend"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:layout_width="237dp"
-                    android:layout_height="wrap_content">
-
-                    <Button
-                        android:id="@+id/btnContact"
-                        android:layout_width="@dimen/_185sdp"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentStart="true"
-                        android:layout_below="@+id/activity_art_gallery_details_txt_price"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginStart="17dp"
-                        android:background="@drawable/btn_shape"
-                        android:text="Chat With Priyanka"
-                        android:textColor="@color/white"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="73dp"
-                    android:layout_height="45dp"
-                    android:layout_marginLeft="@dimen/_50sdp"
-                    android:orientation="horizontal"
-                    android:weightSum="1">
-
-                    <ImageView
-                        android:id="@+id/ivEdit"
-                        android:layout_width="89dp"
-                        android:layout_height="match_parent"
-                        android:layout_alignBottom="@+id/btnContact"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="@dimen/_10sdp"
-                        android:layout_weight="0.84"
-                        android:src="@drawable/edit"/>
-
-                </LinearLayout>
-            </LinearLayout>
-
-        </LinearLayout>
-
-    </LinearLayout>
-
-
-</android.support.design.widget.CoordinatorLayout>
+                android:layout_gravity="bottom|right|center"
+                android:layout_toRightOf="@+id/activity_art_gallery_details_imgfeedbacksend"
+                android:layout_weight="1.7"
+                android:gravity="bottom|right|center"
+                android:src="@drawable/ic_menu_send" />
+        </LinearLayout>-->
+    </RelativeLayout>
+</RelativeLayout>

@@ -1,0 +1,73 @@
+{
+  "project_info": {
+    "project_number": "28449162903",
+    "firebase_url": "https://piccity-1cfc5.firebaseio.com",
+    "project_id": "piccity-1cfc5",
+    "storage_bucket": "piccity-1cfc5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:28449162903:android:eba4bc199e1cdf1d",
+        "android_client_info": {
+          "package_name": "com.example.archi1.piccity"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "28449162903-s9513mt1d0d4fsidch86o5onnn687hiv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDF0PVi3grW5DFNyAgS1r6Vr4hUAh9FsGM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:28449162903:android:c9c6a0c7e44f69e5",
+        "android_client_info": {
+          "package_name": "com.example.archi1.piccity.Activity"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "28449162903-s9513mt1d0d4fsidch86o5onnn687hiv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDF0PVi3grW5DFNyAgS1r6Vr4hUAh9FsGM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

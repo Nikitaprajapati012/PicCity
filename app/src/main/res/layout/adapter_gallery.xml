@@ -22,10 +22,16 @@
                 android:layout_width="match_parent"
                 android:id="@+id/adapter_gallery_image"
                 android:src="@drawable/ic_placeholder"
+                android:layout_marginTop="@dimen/_3sdp"
+                android:layout_marginRight="@dimen/_5sdp"
+                android:layout_marginLeft="@dimen/_5sdp"
                 android:layout_height="160dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true"
-                android:scaleType="fitXY"/>
+                android:scaleType="fitXY"
+                android:adjustViewBounds="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"/>
 
             <TextView
                 android:layout_width="@dimen/_190sdp"
@@ -34,12 +40,12 @@
                 android:layout_below="@+id/adapter_gallery_image"
                 android:paddingLeft="@dimen/_10sdp"
                 android:paddingRight="@dimen/_10sdp"
+                android:text="@string/imagename"
                 android:paddingTop="@dimen/_10sdp"
                 android:textColor="#4c4c4c"
                 android:textSize="@dimen/_14sdp" />
 
-
-            <ImageView
+          <!--  <ImageView
                 android:layout_width="20dp"
                 android:layout_height="40dp"
                 android:id="@+id/overflow"
@@ -48,8 +54,7 @@
                 android:layout_marginTop="10dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_dots"
-
-                />
+                />-->
         </RelativeLayout>
 
 

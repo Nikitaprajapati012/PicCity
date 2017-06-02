@@ -5,10 +5,8 @@
     android:id="@+id/activity_camera_image_priview"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
     android:orientation="vertical"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.archi1.piccity.Activity.CameraImagePriview"
     android:weightSum="1">
 
     <ImageView

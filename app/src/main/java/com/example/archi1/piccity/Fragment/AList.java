@@ -46,11 +46,8 @@ public class AList extends Fragment implements View.OnClickListener{
     public EditText searchAlistimageEdt;
     public AListAdapter alistPicAdapter;
 
-
-
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater,  ViewGroup container,  Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_a_list, container, false);
         init(view);
@@ -63,12 +60,10 @@ public class AList extends Fragment implements View.OnClickListener{
         searchAlistimageEdt.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
             }
 
             @Override

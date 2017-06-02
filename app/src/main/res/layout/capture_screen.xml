@@ -32,7 +32,7 @@
         fab:menu_colorNormal="#da3c2f"
         fab:menu_colorPressed="#dc4b3f"
         fab:menu_colorRipple="#99d4d4d4"
-        fab:menu_fab_label="Chosse Action"
+        fab:menu_fab_label="Choose Action"
         fab:menu_fab_size="normal"
         fab:menu_icon="@drawable/fab_add"
         fab:menu_labels_colorNormal="#333"
@@ -100,58 +100,5 @@
             android:src="@drawable/ic_email"
             fab:fab_label="Canvas Picture"
             fab:fab_size="mini" />
-
-
         </com.github.clans.fab.FloatingActionMenu>
-
-    <!--<LinearLayout
-        android:layout_width="match_parent"
-        android:gravity="center"
-        android:background="#000000"
-        android:layout_height="wrap_content">
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_retake_image"
-            android:text="Retake"/>
-
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_Image_Post"
-            android:text=" 'A' List"/>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_Image_makeCanvas"
-            android:text="Royalty"/>
-
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:gravity="center"
-        android:background="#000000"
-        android:layout_height="match_parent">
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_filter"
-            android:text="Filter"/>
-
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_canvastpic"
-            android:text="Canvas Picture"/>
-
-
-
-    </LinearLayout>-->
 </RelativeLayout>

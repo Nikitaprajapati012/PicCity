@@ -1,46 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
 
     <LinearLayout
         android:id="@+id/lnsearch"
-        android:padding="@dimen/_2sdp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:padding="@dimen/_2sdp">
 
 
         <Spinner
-            android:padding="@dimen/_3sdp"
-            android:background="@drawable/edt_shape"
             android:id="@+id/spnrCategoryArtGallery"
             android:layout_width="@dimen/_25sdp"
             android:layout_height="@dimen/_25sdp"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:background="@drawable/edt_shape"
+            android:padding="@dimen/_3sdp" />
 
         <ImageView
-            android:layout_width="wrap_content"
             android:id="@+id/ivSearchArtGallery"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@android:drawable/ic_search_category_default" />
 
     </LinearLayout>
 
 
-    <GridView
-        android:id="@+id/fragment_art_gallery_grid"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/fragment_art_gallery_list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_below="@+id/lnsearch"
-        android:layout_marginTop="@dimen/_5sdp"
-        android:horizontalSpacing="@dimen/_6sdp"
-        android:numColumns="auto_fit"
-        android:stretchMode="columnWidth">
+        android:layout_marginTop="@dimen/_5sdp">
 
-    </GridView>
+    </android.support.v7.widget.RecyclerView>
 
 
     <LinearLayout

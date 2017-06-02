@@ -5,9 +5,9 @@ import android.content.res.Resources;
 import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -32,34 +32,24 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-/**
- * Created by archi1 on 11/25/2016.
+/** * Created by archi1 on 11/25/2016.
  */
 
-public class GalleryFragment extends android.support.v4.app.Fragment {
-
+public class GalleryFragment extends Fragment {
     public ArrayList<GalleryDetails> galleryArray;
     private GalleryAdapter mAdapter;
     public RecyclerView recyclerView;
-
     public ImageView pagerImageView;
     public Utils utils;
     public CollapsingToolbarLayout collapsingToolbar;
     public AppBarLayout appBarLayout;
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,  Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-
         View view = inflater.inflate(R.layout.fragmemt_gallery, container, false);
         utils = new Utils(getActivity());
-
-        //   ((Activity) getActivity()).setTitle(R.string.gallery);
-
-        collapsingToolbar =
-                (CollapsingToolbarLayout) view.findViewById(R.id.collapsing_toolbar);
-
+        collapsingToolbar =(CollapsingToolbarLayout) view.findViewById(R.id.collapsing_toolbar);
         collapsingToolbar.setTitle("    ");
         appBarLayout = (AppBarLayout) view.findViewById(R.id.appbar);
         appBarLayout.setExpanded(true);
@@ -76,32 +66,15 @@ public class GalleryFragment extends android.support.v4.app.Fragment {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
         if (utils.isConnectingToInternet() == true) {
-
             new getGallery().execute();
         } else {
             Toast.makeText(getActivity(), "No Internet Connection", Toast.LENGTH_SHORT).show();
         }
-
-
         return view;
     }
 
-
-    @Override
-    public void onResume() {
-       // getActivity().setTitle(R.string.art_list);
-        //((Activity) getActivity()).setTitle(R.string.gallery);
-        super.onResume();
-
-    }
-
-
     private void initCollapsingToolbar() {
-
-
         // hiding & showing the title when toolbar expanded & collapsed
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             boolean isShow = false;
@@ -122,7 +95,12 @@ public class GalleryFragment extends android.support.v4.app.Fragment {
                 }
             }
         });
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        getActivity().setTitle("Gallery Pics");
 
     }
 
@@ -140,7 +118,7 @@ public class GalleryFragment extends android.support.v4.app.Fragment {
 
         @Override
         protected String doInBackground(String... params) {
-            /*http://web-medico.com/web1/pic_citi/Api/get_image_data.php*/
+            /*http://web-medico.com/web1/pic_citi/Api/get_image_size.php*/
             String Url = Constant.Base_URL + "get_image_size.php";
             return utils.MakeServiceCall(Url);/*http://web-medico.com/web1/pic_citi/Api/get_image_size.php*/
         }
@@ -154,9 +132,7 @@ public class GalleryFragment extends android.support.v4.app.Fragment {
                 JSONObject mainobject = new JSONObject(s);
 
                 if (mainobject.getString("status").equalsIgnoreCase("true")) {
-
                     JSONArray jsonArray = mainobject.getJSONArray("data");
-
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
                         GalleryDetails gallery = new GalleryDetails();
@@ -165,9 +141,8 @@ public class GalleryFragment extends android.support.v4.app.Fragment {
                         gallery.setImage(jsonObject.getString("image"));
                         gallery.setCanvas_image(jsonObject.getString("canvas_image"));
                         gallery.setSize(jsonObject.getString("size"));
-                        utils.WriteSharePrefrence(getActivity(), Constant.CanvasSizePrice, jsonObject.getString("size"));
+                        Utils.WriteSharePrefrence(getActivity(), Constant.CanvasSizePrice, jsonObject.getString("size"));
                         galleryArray.add(gallery);
-
                     }
                 }
             } catch (JSONException e) {
@@ -186,7 +161,6 @@ public class GalleryFragment extends android.support.v4.app.Fragment {
         private int spanCount;
         private int spacing;
         private boolean includeEdge;
-
 
         GridSpacingItemDecoration(int spanCount, int spacing, boolean includeEdge) {
 
@@ -216,8 +190,6 @@ public class GalleryFragment extends android.support.v4.app.Fragment {
                     outRect.top = spacing; // item top
                 }
             }
-
-
         }
     }
 

@@ -10,8 +10,41 @@ public class ArtGallery {
     private String image;
     private String price;
     private String description;
-    private String location,name,username,userId,category,currency;
+    private String imageFeedBackId;
+    private String imageFeedBackText;
+    private String location;
+    private String name;
+    private String username;
+    private String userProfilePic;
 
+    public String getUserProfilePic() {
+        return userProfilePic;
+    }
+
+    public void setUserProfilePic(String userProfilePic) {
+        this.userProfilePic = userProfilePic;
+    }
+
+    private String userId;
+    private String category;
+    private String currency;
+    private String paypalEmail;
+
+    public String getImageFeedBackId() {
+        return imageFeedBackId;
+    }
+
+    public void setImageFeedBackId(String imageFeedBackId) {
+        this.imageFeedBackId = imageFeedBackId;
+    }
+
+    public String getImageFeedBackText() {
+        return imageFeedBackText;
+    }
+
+    public void setImageFeedBackText(String imageFeedBackText) {
+        this.imageFeedBackText = imageFeedBackText;
+    }
 
     public String getCategory() {
         return category;
@@ -27,6 +60,14 @@ public class ArtGallery {
 
     public void setCurrency(String currency) {
         this.currency = currency;
+    }
+
+    public String getPaypalEmail() {
+        return paypalEmail;
+    }
+
+    public void setPaypalEmail(String paypalEmail) {
+        this.paypalEmail = paypalEmail;
     }
 
     public String getUserId() {

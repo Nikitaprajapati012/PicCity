@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -27,21 +28,15 @@ import java.util.List;
 
 import butterknife.BindView;
 
-import static com.example.archi1.piccity.Constant.Constant.MESSAGE_MAX_LENGTH;
-import static com.example.archi1.piccity.Constant.Constant.MESSAGE_MIN_LENGTH;
-
 public class ChatActivity extends AppCompatActivity {
-
     public static ChatAdapter chatAdapter;
     public static List<MessageDetails> listmsgdetails;
     public String strMsg;
-
-
     @BindView(R.id.activity_test_msg_edt)
     public EditText msgEdt;
     @BindView(R.id.activity_test_send)
     public ImageView sendIV;
-    String user_id_img, user_id;
+    String user_id_img, user_id, sender_id, receipt_id;
     Utils utils;
     private RecyclerView recyclerView;
 
@@ -54,19 +49,18 @@ public class ChatActivity extends AppCompatActivity {
         utils = new Utils(this);
         //user_id =Utils.ReadSharePrefrence(this,Constant.USER_ID);  //"86";
         user_id_img = getIntent().getStringExtra("user_id");
-        Log.d("ID@#",""+user_id_img);
-
         sendIV = (ImageView) findViewById(R.id.activity_test_send);
         msgEdt = (EditText) findViewById(R.id.activity_test_msg_edt);
         user_id = Utils.ReadSharePrefrence(this, Constant.USER_ID);
-
-
+        receipt_id = getIntent().getStringExtra("receipt_id");
+        sender_id = getIntent().getStringExtra("sender_id");
+        Toast.makeText(this, "GET "+receipt_id+"sender="+sender_id, Toast.LENGTH_SHORT).show();
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         sendIV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                strMsg = msgEdt.getText().toString();
-                new SendMessage().execute();
-
+                strMsg = msgEdt.getText().toString().replaceAll(" ", "%20");
+                new SendMessage(strMsg).execute();
             }
         });
     }
@@ -93,8 +87,13 @@ public class ChatActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... params) {
-            String receivemessage = Constant.Base_URL + "get_chat_msg.php?" + "sender_id=" + user_id + "&recipient_id=" + user_id_img;
-            Log.d("URL", receivemessage);
+            String receivemessage;
+            if (Constant.ON_CLICK_NOTIFICATION == 0) {
+                receivemessage = Constant.Base_URL + "get_chat_msg.php?" + "sender_id=" + user_id + "&recipient_id=" + receipt_id;
+            } else {
+                receivemessage = Constant.Base_URL + "get_chat_msg.php?" + "sender_id=" + sender_id + "&recipient_id=" + receipt_id;
+                Constant.ON_CLICK_NOTIFICATION = 0;
+            }
             return Utils.getResponseofGet(receivemessage);
         }
 
@@ -102,7 +101,6 @@ public class ChatActivity extends AppCompatActivity {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             pd.dismiss();
-            Log.d("response", s.toString());
             try {
                 JSONObject jsonObject = new JSONObject(s);
                 if (jsonObject.getString("status").equalsIgnoreCase("true")) {
@@ -117,11 +115,13 @@ public class ChatActivity extends AppCompatActivity {
                         messageDetails.setRecipient(jsonObject1.getString("recipient_id"));
                         messageDetails.setText(jsonObject1.getString("msg"));
 
+                        Utils.WriteSharePrefrence(getApplicationContext(), Constant.RECEIPT_ID, jsonObject1.getString("recipient_id"));
+
                         listmsgdetails.add(messageDetails);
 
                     }
                     chatAdapter = new ChatAdapter(ChatActivity.this, listmsgdetails);
-                    RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+                    RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(ChatActivity.this);
                     recyclerView.setLayoutManager(mLayoutManager);
                     recyclerView.setItemAnimator(new DefaultItemAnimator());
                     recyclerView.setAdapter(chatAdapter);
@@ -133,6 +133,11 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private class SendMessage extends AsyncTask<String, String, String> {
+        String strMessage;
+
+        public SendMessage(String strMsg) {
+            this.strMessage=strMsg;
+        }
 
         @Override
         protected void onPreExecute() {
@@ -142,7 +147,7 @@ public class ChatActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... params) {
 
-            String sendmessage = Constant.Base_URL + "insert_chat_msg.php?sender_id=" + user_id + "&recipient_id=" + user_id_img + "&msg=" + strMsg;
+            String sendmessage = Constant.Base_URL + "insert_chat_msg.php?sender_id=" + user_id + "&recipient_id=" + receipt_id + "&msg=" + strMessage;
             Log.d("URL", "" + sendmessage);
             return Utils.getResponseofGet(sendmessage);
         }
@@ -151,29 +156,22 @@ public class ChatActivity extends AppCompatActivity {
         protected void onPostExecute(String s) {
             Log.d("POST EXECUTE", "" + s);
             try {
-                if (msgEdt.length() > MESSAGE_MIN_LENGTH && msgEdt.length() < MESSAGE_MAX_LENGTH) {
+                JSONObject jsonObject = new JSONObject(s);
+                if (jsonObject.getString("status").equalsIgnoreCase("true")) {
+                    Toast.makeText(ChatActivity.this, "Message Sent Successfully....", Toast.LENGTH_SHORT).show();
+                    MessageDetails details = new MessageDetails();
+                    details.setRecipient(user_id_img);
+                    details.setSender(user_id);
+                    details.setName("archi");
+                    details.setSubject("Archirayan");
+                    details.setText(msgEdt.getText().toString());
+                    listmsgdetails.add(details);
+                    msgEdt.setText("");
+                    chatAdapter.notifyDataSetChanged();
+                    Log.d("Length@", "" + listmsgdetails.size());
 
-                    JSONObject jsonObject = new JSONObject(s);
-                    if (jsonObject.getString("status").equalsIgnoreCase("true")) {
-
-                        Toast.makeText(ChatActivity.this, "Message Sent", Toast.LENGTH_SHORT).show();
-
-                        MessageDetails details = new MessageDetails();
-                        details.setSender("5");
-                        details.setRecipient("1");
-                        details.setName("archi");
-                        details.setSubject("Archirayan");
-                        details.setText(msgEdt.getText().toString());
-
-                        listmsgdetails.add(details);
-                        msgEdt.setText("");
-                        chatAdapter.notifyDataSetChanged();
-
-                        Log.d("Length@", "" + listmsgdetails.size());
-
-                    } else {
-                        Toast.makeText(ChatActivity.this, "Message Sent Failed", Toast.LENGTH_SHORT).show();
-                    }
+                } else {
+                    Toast.makeText(ChatActivity.this, "Message Sent Failed", Toast.LENGTH_SHORT).show();
                 }
             } catch (Exception e) {
                 e.printStackTrace();

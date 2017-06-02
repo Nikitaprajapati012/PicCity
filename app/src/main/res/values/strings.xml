@@ -5,11 +5,13 @@
     <string name="mygallery">MyGallery</string>
     <string name="art_list">A List</string>
     <string name="alist">A List</string>
+    <string name="chat">Chat</string>
     <string name="royalty">Royalty Pics List </string>
     <string name="invite_user">Invite User</string>
     <string name="canvasme">Canvas Me </string>
     <string name="canvasmepic">Canvas My Pic </string>
-    <string name="personal_artist">Personal Artist</string>
+    <string name="canvaspic">Canvas Pics</string>
+    <string name="personal_artist">Pic Citi Friends</string>
     <string name="logout">Logout</string>
 
     <string name="hint_username">username</string>
@@ -18,6 +20,7 @@
     <string name="hint_Mobile">Mobile</string>
     <string name="hint_Name">Name</string>
     <string name="hint_Email">Email</string>
+    <string name="hint_PaypalEmail">PayPal Email</string>
     <string name="enterimagename">Enter ImageName</string>
     <string name="Email">Email</string>
     <string name="forgetpassword">Forget Password</string>
@@ -36,13 +39,12 @@
     <string name="share_fb">Share Image</string>
     <string name="share_insta">Share On Instagram</string>
     <string name="menu_msg">Text Message</string>
-    <string name="canvas_me">Canvas Me</string>
     <string name="paste_me">Paste Me</string>
     <string name="canvas_my_pic">Canvas My Pic</string>
     <string name="message">Enter Your Messege</string>
     <string name="facebook_share">FaceBook</string>
     <string name="instagram_share">Instagram</string>
-    <string name="canvas_pic">Canvas Pics</string>
+    <string name="canvas_pic">Canvas Pic</string>
     <string name="send">Send</string>
     <string-array name="nav_drawer_labels">
         <item>@string/gallery</item>
@@ -50,7 +52,7 @@
         <item>@string/mygallery</item>
         <item>@string/alist</item>
         <item>@string/royalty</item>
-        <item>@string/canvas_me</item>
+        <item>@string/chat</item>
         <item>@string/canvas_my_pic</item>
         <item>@string/personal_artist</item>
         <item>@string/invite_user</item>
@@ -61,4 +63,29 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="share_image">Share Image ...</string>
     <string name="title_activity_canvas__my_gallery__pics">Canvas_MyGallery_Pics</string>
+    <string name="uploadoptionphoto">Upload Photos From here...</string>
+    <string name="uploadoptionvideo">Upload Videos From here...</string>
+    <string name="cancel">Cancel</string>
+    <string name="buy">Buy</string>
+    <string name="imageprice">Image Price</string>
+    <string name="imagename">Image Name</string>
+    <string name="feedback_user_name">UserName</string>
+    <string name="username">Username</string>
+    <string name="canvas_my_gallery">Send to My Gallery</string>
+    <string name="image_details">Image Details</string>
+    <string name="selectsize">SelectSize</string>
+    <string name="price">Price</string>
+    <string name="name">Name</string>
+    <string name="description">Description</string>
+    <string name="feedback_des">FeedBack</string>
+    <string name="sendmessage">Send Message</string>
+    <string name="feedback">FeedBack</string>
+    <string name="address">Address</string>
+    <string name="quantity">Quantity</string>
+    <string name="zipcode">Zipcode</string>
+    <string name="sendfriendrequest">Send Friend Request</string>
+    <string name="friends">Friends</string>
+    <string name="acceptrequest">Accept Request</string>
+    <string name="removefriend">Remove Friend</string>
+    <string name="requestsent">Request Sent</string>
 </resources>

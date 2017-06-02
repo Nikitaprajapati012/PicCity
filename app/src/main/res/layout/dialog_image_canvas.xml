@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="@dimen/_5sdp"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:weightSum="8"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/dialog_edaddress"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/edt_shape"
+                android:hint="@string/address"
+                android:layout_weight="1"
+                android:layout_margin="@dimen/_3sdp"
+                android:textColor="@color/wpn"
+                android:textColorHint="@color/wpn"
+                android:textSize="@dimen/_15sdp" />
+
+            <Spinner
+                android:id="@+id/dialog_spinnercountry"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_30sdp"
+                android:layout_weight="1"
+                android:layout_margin="@dimen/_3sdp"
+                android:background="@drawable/edt_shape"
+                android:maxLength="10"
+                android:textColor="@color/wpn" />
+
+            <Spinner
+                android:id="@+id/dialog_spinnerstate"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_30sdp"
+                android:layout_weight="1"
+                android:background="@drawable/edt_shape"
+                android:maxLength="10"
+                android:layout_margin="@dimen/_3sdp"
+                android:textColor="@color/wpn" />
+
+            <Spinner
+                android:id="@+id/dialog_spinnercity"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_30sdp"
+                android:layout_weight="1"
+                android:layout_margin="@dimen/_3sdp"
+                android:background="@drawable/edt_shape"
+                android:maxLength="10"
+                android:textColor="@color/wpn" />
+
+            <EditText
+                android:id="@+id/dialog_edzipcode"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/edt_shape"
+                android:hint="@string/zipcode"
+                android:layout_margin="@dimen/_3sdp"
+                android:textColor="@color/wpn"
+                android:textColorHint="@color/wpn" />
+
+            <EditText
+                android:id="@+id/dialog_eddescription"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_margin="@dimen/_3sdp"
+                android:background="@drawable/edt_shape"
+                android:hint="@string/description"
+                android:textColor="@color/wpn"
+                android:textColorHint="@color/wpn" />
+
+            <EditText
+                android:id="@+id/dialog_edquantity"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_margin="@dimen/_3sdp"
+                android:background="@drawable/edt_shape"
+                android:hint="@string/quantity"
+                android:textColor="@color/wpn"
+                android:textColorHint="@color/wpn" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:weightSum="2"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+                <Button
+                    android:id="@+id/dialog_btnsubmit"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_shape"
+                    android:text="@string/submit"
+                    android:textColor="@color/white" />
+
+                <Button
+                    android:id="@+id/dialog_btncancel"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/btn_shape"
+                    android:text="@string/cancel"
+                    android:textColor="@color/white" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

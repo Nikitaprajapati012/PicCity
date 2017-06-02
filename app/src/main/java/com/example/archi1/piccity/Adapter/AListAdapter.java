@@ -35,15 +35,11 @@ public class AListAdapter extends BaseAdapter {
     public FragmentActivity activity;
     private List<String> friendList= new ArrayList<>();
 
-
-
     public AListAdapter(Context context, List<String> friendList) {
         this.context = context;
         this.friendList = friendList;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
-
-
 
     @Override
     public int getCount() {
@@ -63,20 +59,16 @@ public class AListAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
-
-
         if (convertView == null){
             convertView = inflater.inflate(R.layout.adapter_a_list,null);
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);
-
         }else {
             holder = (ViewHolder)convertView.getTag();
         }
         holder.Name.setText(friendList.get(position));
         //holder.imageView.setImageDrawable(R.drawable.ic_placeholder);
         Glide.with(context).load(R.drawable.ic_placeholder).placeholder(R.drawable.ic_placeholder).into(holder.imageView);
-
         return convertView;
     }
 

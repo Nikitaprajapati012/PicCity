@@ -18,7 +18,7 @@ public class RoyaltyPicGallery {
     }
 
     private String name,userid;
-    private String user_profile;
+    private String user_profile,paypal_email;
 
     public String getUserid() {
         return userid;
@@ -42,6 +42,14 @@ public class RoyaltyPicGallery {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public String getPaypal_email() {
+        return paypal_email;
+    }
+
+    public void setPaypal_email(String paypal_email) {
+        this.paypal_email = paypal_email;
     }
 
     public String getName() {

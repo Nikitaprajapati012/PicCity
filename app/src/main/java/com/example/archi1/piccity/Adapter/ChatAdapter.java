@@ -21,7 +21,6 @@ import java.util.List;
 
 public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-
     private static final int SENDERVIEW = 0;
     private static final int RECEIVERVIEW = 1;
     private Context context;
@@ -35,19 +34,20 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         this.chatArray = data;
     }
 
+
+
     @Override
     public int getItemViewType(int position) {
         Receive_id = Utils.ReadSharePrefrence(context, Constant.USER_ID);
         if (chatArray.get(position).getSender().equalsIgnoreCase(Utils.ReadSharePrefrence(context, Constant.USER_ID))) {
-            return RECEIVERVIEW;
-        } else {
             return SENDERVIEW;
+        } else {//if (chatArray. get(position).getRecipient().equalsIgnoreCase(Utils.ReadSharePrefrence(context, Constant.RECEIPT_ID))){
+            return RECEIVERVIEW;
         }
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
         RecyclerView.ViewHolder viewHolder = null;
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 

@@ -25,8 +25,8 @@
         android:textSize="@dimen/_18sdp"
         android:gravity="center"
         android:textColor="@color/white"
-       />
-    
+        />
+
     <ImageView
         android:id="@+id/ivAddButton"
         android:layout_width="@dimen/_30sdp"

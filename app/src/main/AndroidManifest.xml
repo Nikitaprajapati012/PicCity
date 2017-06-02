@@ -3,6 +3,7 @@
     package="com.example.archi1.piccity">
 
     <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -15,42 +16,72 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
-
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
         android:name=".PicCity"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:debuggable="false"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activity.SplashActivity">
+        <activity android:name=".Activity.SplashActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activity.Register"></activity>
-        <activity android:name=".Activity.LoginActivity" />
-        <activity android:name=".Activity.MainActivity"></activity>
-        <activity android:name=".Activity.GalleryDetailsActivity" />
-        <activity android:name=".Activity.ArtGalleryDetailsActivity" />
-        <activity android:name=".Activity.CameraImagePriview" />
-        <activity android:name=".Activity.RoyaltyPicDetailsActivity" />
-        <activity android:name=".Activity.EditArtListActivity" />
-        <activity android:name=".Activity.UpdateImageAvtivity" />
-        <activity android:name=".Activity.CanvasGalleryImage" />
-        <activity android:name=".Activity.CanvasRoyaltyImage" />
-        <activity android:name=".Activity.Testing" />
-        <activity android:name=".Activity.Canvas_MyGallery_Pics"></activity>
-        <activity android:name=".Activity.ChatActivity">
+        <activity android:name=".Activity.Register"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:windowSoftInputMode="adjustPan"></activity>
+        <activity android:name=".Activity.LoginActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".Activity.MainActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:windowSoftInputMode="adjustPan">
 
         </activity>
+        <activity android:name=".Activity.GalleryDetailsActivity" />
+        <activity android:name=".Activity.ArtGalleryDetailsActivity" />
+        <activity android:name=".Activity.CameraImagePriview"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:windowSoftInputMode="adjustPan"/>
+
+        <activity android:name=".Activity.RoyaltyPicDetailsActivity"
+                  android:configChanges="orientation|keyboardHidden|screenSize"
+                  android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".Activity.EditArtListActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".Activity.UpdateImageAvtivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".Activity.CanvasGalleryImage"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".Activity.Testing" />
+        <activity android:name=".Activity.ChatActivity"
+            android:windowSoftInputMode="adjustResize">
+        </activity>
+        <service android:name=".FCM.MyFirebaseInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name=".FCM.MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+
     </application>
 
 </manifest>

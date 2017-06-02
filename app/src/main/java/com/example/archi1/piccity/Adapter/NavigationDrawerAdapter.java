@@ -30,11 +30,12 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
             R.drawable.mygallery,
             R.drawable.ic_recipie,
             R.drawable.ic_alist,
-            R.drawable.ic_fevorit,
+            R.drawable.chat,
             R.drawable.ic_canvasme,
             R.drawable.ic_canvasmypic,
-            R.drawable.ic_logout,
             R.drawable.ic_invite,
+            R.drawable.ic_logout,
+
     };
     public NavigationDrawerAdapter(Context context, List<NavDrawerItem> data) {
         this.context = context;

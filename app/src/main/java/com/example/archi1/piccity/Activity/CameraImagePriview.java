@@ -3,6 +3,8 @@ package com.example.archi1.piccity.Activity;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -41,17 +43,16 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 
 public class CameraImagePriview extends AppCompatActivity implements View.OnClickListener {
-
-
     public EditText dialogPrice, dialogDesc, dialogLoc, dialogTitle;
     public Button dialogDone, dialogCancel;
-    public Spinner dialogSpnerPrice;
+    public Spinner dialogSpnerPrice, dialogCategory;
     public ArrayList<String> arrayListPrice;
     private String imagePath, strPrice, strDesc, strLoc, strTitle;
-    private Spinner dialogCategory;
     private ArrayList<String> arrayCategoryList;
     private String selectedCategoryName;
     private ArrayList<String> categoryIdArray;
@@ -66,59 +67,31 @@ public class CameraImagePriview extends AppCompatActivity implements View.OnClic
     private int SELECT_IMAGE = 200;
     private int FILTER_IMAGE = 400;
 
-
     public static Bitmap RotateBitmap(Bitmap source, float angle) {
-
         Matrix matrix = new Matrix();
         matrix.postRotate(angle);
         return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
     }
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.capture_screen);
-
-
         ivCapture = (ImageView) findViewById(R.id.captureimage);
-
+        Utils utils = new Utils(this);
         materialDesignFAM = (FloatingActionMenu) findViewById(R.id.material_design_android_floating_action_menu);
-
-
         btnCanvas = (FloatingActionButton) findViewById(R.id.btn_Image_makeCanvas);
         btnImagePost = (FloatingActionButton) findViewById(R.id.btn_Image_Post);
         btnRetakeImage = (FloatingActionButton) findViewById(R.id.btn_retake_image);
         btnFIlter = (FloatingActionButton) findViewById(R.id.btn_filter);
         btnCanvasPic = (FloatingActionButton) findViewById(R.id.btn_canvastpic);
-
-
-
-
-        /*materialDesignFAM.setOnMenuToggleListener(new FloatingActionMenu.OnMenuToggleListener() {
-            @Override
-            public void onMenuToggle(boolean opened) {
-                if (opened){
-                    Toast.makeText(CameraImagePriview.this, "Menu is open", Toast.LENGTH_SHORT).show();
-                }else {
-                    Toast.makeText(CameraImagePriview.this, "Menu is closed", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });*/
-
-
         btnFIlter.setOnClickListener(this);
-        btnCanvasPic.setOnClickListener(this);
 
-
-        arrayListPrice = new ArrayList<>();
-        categoryIdArray = new ArrayList<>();
-        categoryNameArray = new ArrayList<>();
-
-
-        arrayListPrice.add("IND");
-        arrayListPrice.add("USD");
-
+        if (utils.isConnectingToInternet())
+        {
+            GetCategoryList();
+            new getCurrencyCode().execute();
+        }
         materialDesignFAM.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -127,74 +100,58 @@ public class CameraImagePriview extends AppCompatActivity implements View.OnClic
                 }
             }
         });
-
-
         Bundle bundle = getIntent().getExtras();
 
         if (bundle != null) {
-
             String status = bundle.getString("status");
-
             if (status.equalsIgnoreCase("gallery")) {
-
                 String galleryImagePath = getIntent().getStringExtra("GalleryImagePath");
-                /* Bitmap newBitmap = BitmapFactory.decodeFile(galleryImagePath);*/
-
-                Log.d("msg", "gallery path " + galleryImagePath);
-
-                imagePath = getPathFromURI(Uri.parse(galleryImagePath));
-                Bitmap newBitmap = BitmapFactory.decodeFile(imagePath);
-                ivCapture.setImageBitmap(newBitmap);
-                Log.d("jaydip", imagePath);
-
-
+                Toast.makeText(this, "galleryImagePath" + imagePath, Toast.LENGTH_SHORT).show();
+                Bitmap myBitmap = BitmapFactory.decodeFile(galleryImagePath);
+                ivCapture.setImageBitmap(myBitmap);
             } else {
-
                 if (bundle.containsKey("path")) {
                     imagePath = bundle.getString("path", "");
                     activityStatus = bundle.getString("ActivitStatus");
-                    Log.d("rujul", "d  " + imagePath);
-                    Log.d("rujul", "activityStatus " + activityStatus);
                     Bitmap myBitmap = BitmapFactory.decodeFile(imagePath);
+                    Toast.makeText(this, "IMAGEPATH_GET" + imagePath, Toast.LENGTH_SHORT).show();
                     Bitmap newBitmap = RotateBitmap(myBitmap, 90f);
                     ivCapture.setImageBitmap(newBitmap);
                 }
             }
-
-
         }
-
-        if (activityStatus.equalsIgnoreCase("RoyaltyPicFragment")) {
+/*        if (activityStatus.equalsIgnoreCase("RoyaltyPicFragment")) {
             // hide buttons
             btnImagePost.setVisibility(View.GONE);
             btnCanvasPic.setVisibility(View.GONE);
             btnFIlter.setVisibility(View.GONE);
         } else if (activityStatus.equalsIgnoreCase("SaleStuff")) {
+            Toast.makeText(this, "something went to wrong", Toast.LENGTH_SHORT).show();
+        }*/
 
-        }
+
+        btnCanvasPic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AddCanvasImage();
+                materialDesignFAM.close(true);
+            }
+        });
 
         btnCanvas.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Toast.makeText(CameraImagePriview.this, "click ", Toast.LENGTH_SHORT).show();
                 AddToRoyality();
                 materialDesignFAM.close(true);
-
             }
         });
-
-
         btnImagePost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
                 materialDesignFAM.close(true);
                 final Dialog dialog = new Dialog(CameraImagePriview.this);
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialog.setContentView(R.layout.dialog_image_upload);
-
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
                 Window window = dialog.getWindow();
                 window.setLayout(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -205,35 +162,34 @@ public class CameraImagePriview extends AppCompatActivity implements View.OnClic
                 dialogTitle = (EditText) dialog.findViewById(R.id.et_title);
                 dialogDone = (Button) dialog.findViewById(R.id.btn_done);
                 dialogCancel = (Button) dialog.findViewById(R.id.btn_cancel);
-                //dialogCategory = (Spinner) dialog.findViewById(R.id.et_upload_img_category);
+                //  dialogCategory = (Spinner) dialog.findViewById(R.id.et_);
                 dialogSpnerPrice = (Spinner) dialog.findViewById(R.id.spnrPrice);
+                dialogCategory = (Spinner) dialog.findViewById(R.id.spcategory);
                 ArrayAdapter<String> stringArrayAdapter = new ArrayAdapter<>(CameraImagePriview.this, R.layout.spinner_item_view, arrayListPrice);
                 dialogSpnerPrice.setAdapter(stringArrayAdapter);
-
-
-                arrayCategoryList = new ArrayList<>();
-                arrayCategoryList.add("Electronic");
-                arrayCategoryList.add("Cars and Motors");
-                arrayCategoryList.add("Sports Leisure and Games");
-                arrayCategoryList.add("Home and Garden");
-                arrayCategoryList.add("Movies ,Books and Music");
-                arrayCategoryList.add("Fashion and Accessories");
-
 
                 dialogSpnerPrice.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
                         selectedPriceType = arrayListPrice.get(position);
                         Log.d("msg", "currency " + selectedPriceType);
                     }
-
                     @Override
                     public void onNothingSelected(AdapterView<?> parent) {
-
                     }
                 });
-
+                ArrayAdapter<String> spCategory = new ArrayAdapter<String>(CameraImagePriview.this, R.layout.spinner_item_view, categoryNameArray);
+                dialogCategory.setAdapter(spCategory);
+                dialogCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        selectedCategoryName = categoryIdArray.get(position);
+                        Log.d("msg", "selected category  " + selectedCategoryName);
+                    }
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+                    }
+                });
                 dialogDone.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -241,12 +197,31 @@ public class CameraImagePriview extends AppCompatActivity implements View.OnClic
                         strLoc = dialogLoc.getText().toString();
                         strDesc = dialogDesc.getText().toString();
                         strTitle = dialogTitle.getText().toString();
+                        // http://web-medico.com/web1/pic_citi/Api/image_upload_new.php?user_id=86&&image=100_1517373497.jpg&price=2&&description=abcde&location=Ahmedabad,gujarat&name=hay&category_id=1&currency=USD
+                        try {
+                            Ion.with(getApplicationContext())
+                                    .load(Constant.Base_URL + "image_upload_new.php?")
+                                    .setMultipartParameter("user_id", URLEncoder.encode(Utils.ReadSharePrefrence(getApplicationContext(), Constant.UserId), "UTF-8"))
+                                    .setMultipartParameter("price", URLEncoder.encode(strPrice, "UTF-8"))
+                                    .setMultipartParameter("description", URLEncoder.encode(strDesc, "UTF-8"))
+                                    .setMultipartParameter("location", URLEncoder.encode(strLoc, "UTF-8"))
+                                    .setMultipartParameter("name", URLEncoder.encode(strTitle, "UTF-8"))
+                                    .setMultipartParameter("category_id", selectedCategoryName)
+                                    .setMultipartParameter("currency", selectedPriceType)
+                                    .setMultipartFile("image", new File(imagePath))
+                                    .asString()
+                                    .setCallback(new FutureCallback<String>() {
+                                        @Override
+                                        public void onCompleted(Exception e, String result) {
+                                            Log.d("JSONRESULT@@" + "", result);
+                                            Toast.makeText(CameraImagePriview.this, "Add Alist Successfully....", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
 
-                        new UploadImage().execute();
-                      //  Uploadimage();
-                        dialog.dismiss();
-
-
+                            Log.d("IMAGEPATH@", "" + imagePath);
+                        } catch (UnsupportedEncodingException e) {
+                            e.printStackTrace();
+                        }
                     }
                 });
 
@@ -256,40 +231,48 @@ public class CameraImagePriview extends AppCompatActivity implements View.OnClic
                         dialog.dismiss();
                     }
                 });
-
-
-                //GetCategoryList();
-
-
                 dialog.show();
             }
 
         });
-
-
         btnRetakeImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 getSupportFragmentManager().beginTransaction()
                         .replace(android.R.id.content, new SaleStuffFragment()).commit();
                 materialDesignFAM.close(true);
             }
         });
-
-
     }
 
+    public static Uri getImageContentUri(Context context, File imageFile) {
+        String filePath = imageFile.getAbsolutePath();
+        Cursor cursor = context.getContentResolver().query(
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                new String[]{MediaStore.Images.Media._ID},
+                MediaStore.Images.Media.DATA + "=? ",
+                new String[]{filePath}, null);
+        if (cursor != null && cursor.moveToFirst()) {
+            int id = cursor.getInt(cursor.getColumnIndex(MediaStore.MediaColumns._ID));
+            cursor.close();
+            return Uri.withAppendedPath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "" + id);
+        } else {
+            if (imageFile.exists()) {
+                ContentValues values = new ContentValues();
+                values.put(MediaStore.Images.Media.DATA, filePath);
+                return context.getContentResolver().insert(
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+            } else {
+                return null;
+            }
+        }
+    }
 
     private void AddToRoyality() {
-
-
 /*
         http://web-medico.com/web1/pic_citi/Api/add_royalty_pic.php?user_id=25&image=abc.jpg
 */
-        Log.d("msg", "add to royality file image path  " + imagePath + " usr id " + Utils.ReadSharePrefrence(getApplicationContext(), Constant.UserId));
-
-
+        Log.d("imagePath_Royalty", "" + imagePath);
         final ProgressDialog progressDialog = new ProgressDialog(CameraImagePriview.this);
         progressDialog.setMessage("Loading...");
         progressDialog.setCancelable(false);
@@ -298,142 +281,28 @@ public class CameraImagePriview extends AppCompatActivity implements View.OnClic
         Ion.with(CameraImagePriview.this)
                 .load("http://web-medico.com/web1/pic_citi/Api/add_royalty_pic.php?")
                 .progressDialog(progressDialog)
-                .setMultipartParameter("user_id", Utils.ReadSharePrefrence(getApplicationContext(), Constant.UserId))
+                .setMultipartParameter("user_id", Utils.ReadSharePrefrence(getApplicationContext(), Constant.USER_ID))
                 .setMultipartFile("image", new File(imagePath))
                 .asString()
                 .setCallback(new FutureCallback<String>() {
                     @Override
                     public void onCompleted(Exception e, String result) {
-
-                        Log.d("msg", "add to royality res " + result);
-
-                        try {
-
-                            progressDialog.dismiss();
-
-                            JSONObject jsonObject = new JSONObject(result);
-                            String status = jsonObject.getString("successful");
-                            if (status.equalsIgnoreCase("true")) {
-
-                                Toast.makeText(CameraImagePriview.this, "you have send " + jsonObject.getString("total_royalty_pics_uploaded") + "in royality ", Toast.LENGTH_LONG).show();
-                                Intent intent = new Intent(CameraImagePriview.this, MainActivity.class);
-                                startActivity(intent);
-                                finish();
-                            } else {
-
-                                Toast.makeText(CameraImagePriview.this, jsonObject.getString("msg"), Toast.LENGTH_LONG).show();
-                            }
-                        } catch (JSONException e1) {
-                            e1.printStackTrace();
-                        }
-
-
-                    }
-                });
-
-    }
-
-
-    public String getPathFromURI(Uri contentUri) {
-
-        String res = null;
-        String[] proj = {MediaStore.Images.Media.DATA};
-        Cursor cursor = getContentResolver().query(contentUri, proj, null, null, null);
-        if (cursor.moveToFirst()) {
-            int columnIndex = cursor.getColumnIndex(proj[0]);
-            res = cursor.getString(columnIndex);
-        }
-        cursor.close();
-        return res;
-
-
-    }
-
-        class UploadImage extends AsyncTask<String, String, String> {
-            ProgressDialog pd;
-
-            @Override
-            protected void onPreExecute() {
-                pd = new ProgressDialog(CameraImagePriview.this);
-                pd.setMessage("Loading...");
-                pd.setCancelable(false);
-                pd.show();
-                super.onPreExecute();
-            }
-
-            @Override
-            protected String doInBackground(String... params) {
-                String url = Constant.Base_URL + "image_upload_new.php?" + "user_id=" + Utils.ReadSharePrefrence(getApplicationContext(), Constant.UserId) + "&image=" + new File(imagePath) + "&price=" + strPrice + "&description=" + strDesc + "&location=" + strLoc + "&name=" + strTitle + "&category_id=" + selectedCategoryName + "&currency=" + selectedPriceType;
-                Log.d("URL1",""+url);
-                return Utils.getResponseofGet(url);
-
-            }
-
-            @Override
-            protected void onPostExecute(String s) {
-                pd.dismiss();
-                Log.d("POST",""+s);
-                JSONObject jsonObject = null;
-                try {
-                    jsonObject = new JSONObject(s);
-                    String status = jsonObject.getString("status");
-
-                    if (status.equalsIgnoreCase("true")) {
-                        Toast.makeText(CameraImagePriview.this, "Upload Successfully...", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(CameraImagePriview.this, ""+jsonObject.getString("msg"), Toast.LENGTH_SHORT).show();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-                super.onPostExecute(s);
-            }
-        }
-
-        // http://web-medico.com/web1/pic_citi/Api/image_upload_new.php?user_id=25&image=1.jpg&price=20$&
-        // description=xyzzz&location=abc&category_id=1&currency=USD
-
-        /*final ProgressDialog progressDialog = new ProgressDialog(CameraImagePriview.this);
-        progressDialog.setMessage("Loading...");
-        progressDialog.setCancelable(false);
-        progressDialog.show();
-
-        Ion.with(getApplicationContext())
-
-                .load(Constant.Base_URL + "image_upload_new_lat_long.php?")
-                .progressDialog(progressDialog)
-                .setMultipartParameter("user_id", Utils.ReadSharePrefrence(getApplicationContext(), Constant.UserId))
-                .setMultipartFile("image", new File(imagePath))
-                .setMultipartParameter("price", dialogPrice.getText().toString())
-                .setMultipartParameter("description", dialogDesc.getText().toString())
-                .setMultipartParameter("location", dialogLoc.getText().toString())
-                .setMultipartParameter("name", dialogTitle.getText().toString())
-                .setMultipartParameter("category_id", selectedCategoryName)
-                .setMultipartParameter("currency", selectedPriceType)
-                .asString()
-                .setCallback(new FutureCallback<String>() {
-                    @Override
-                    public void onCompleted(Exception e, String result) {
-                        Log.d("msg", "cameraimageprivew res " + result);
-                        Toast.makeText(CameraImagePriview.this, "Succesfully Upload", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(CameraImagePriview.this, "Add Royalty Image Successfully...", Toast.LENGTH_SHORT).show();
+                        Log.d("msg", "@@" + result);
                         progressDialog.dismiss();
-                        Intent intentHome = new Intent(CameraImagePriview.this, MainActivity.class);
-                        intentHome.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(intentHome);
-                        finish();
                     }
                 });
-
-    }*/
+    }
 
     public void GetCategoryList() {
 
 /*
         http://web-medico.com/web1/pic_citi/Api/get_category_list.php
 */
-
         final ProgressDialog progressDialog = new ProgressDialog(CameraImagePriview.this);
+        categoryIdArray = new ArrayList<>();
+        categoryNameArray = new ArrayList<>();
+
         progressDialog.setMessage("Loading...");
         progressDialog.setCancelable(false);
         progressDialog.show();
@@ -467,25 +336,6 @@ public class CameraImagePriview extends AppCompatActivity implements View.OnClic
                                     categoryNameArray.add(categoryName);
                                 }
 
-
-                                // ArrayAdapter<String> spCategory = new ArrayAdapter<String>(CameraImagePriview.this, R.layout.spinner_item_view, categoryNameArray);
-                                // dialogCategory.setAdapter(spCategory);
-
-                                dialogCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                                    @Override
-                                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-                                        selectedCategoryName = categoryIdArray.get(position);
-                                        Log.d("msg", "selected category  " + selectedCategoryName);
-
-                                    }
-
-
-                                    @Override
-                                    public void onNothingSelected(AdapterView<?> parent) {
-
-                                    }
-                                });
                             }
                         } catch (JSONException e1) {
                             e1.printStackTrace();
@@ -494,25 +344,42 @@ public class CameraImagePriview extends AppCompatActivity implements View.OnClic
                 });
     }
 
+    public void AddCanvasImage()
+    {
+        Log.d("imagePath_Royalty", "" + imagePath);
+        final ProgressDialog progressDialog = new ProgressDialog(CameraImagePriview.this);
+        progressDialog.setMessage("Loading...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
+        Ion.with(CameraImagePriview.this)
+                .load("http://web-medico.com/web1/pic_citi/Api/add_canvas_images.php?")
+                .progressDialog(progressDialog)
+                .setMultipartParameter("user_id", Utils.ReadSharePrefrence(getApplicationContext(), Constant.USER_ID))
+                .setMultipartFile("image", new File(imagePath))
+                .asString()
+                .setCallback(new FutureCallback<String>() {
+                    @Override
+                    public void onCompleted(Exception e, String result) {
+                        Toast.makeText(CameraImagePriview.this, "Add Canvas Image Successfully...", Toast.LENGTH_SHORT).show();
+                        Log.d("msg", "@@" + result);
+                        progressDialog.dismiss();
+                    }
+                });
+    }
     @Override
     public void onClick(View v) {
-
-
         switch (v.getId()) {
             case R.id.btn_filter:
-
-                Toast.makeText(CameraImagePriview.this, "click", Toast.LENGTH_SHORT).show();
-
-              /*  Intent intent = new Intent();
-                intent.setType("image*//*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);//
-                startActivityForResult(Intent.createChooser(intent, "Select Picture"), SELECT_IMAGE);
-*/
-                Intent intent = new Intent(Intent.ACTION_EDIT);
-                intent.setDataAndType(Uri.parse(imagePath), "image/*");
-                intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                startActivityForResult(intent, FILTER_IMAGE);
-
+                if (new File(imagePath).exists()) {
+                    Intent intent = new Intent(Intent.ACTION_EDIT);
+                    intent.setDataAndType(getImageContentUri(CameraImagePriview.this, new File(imagePath)), "image/*");
+                    intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    startActivityForResult(intent, FILTER_IMAGE);
+                } else {
+                    Toast.makeText(this, "Not exist", Toast.LENGTH_SHORT).show();
+                }
+                Log.d("ImagePath_Filter",""+imagePath);
                 break;
 
             case R.id.btn_canvastpic:
@@ -529,8 +396,8 @@ public class CameraImagePriview extends AppCompatActivity implements View.OnClic
             if (resultCode == Activity.RESULT_OK) {
                 if (data != null) {
                     try {
-
                         Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
+                        ivCapture.setImageBitmap(bitmap);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -539,20 +406,65 @@ public class CameraImagePriview extends AppCompatActivity implements View.OnClic
                 Toast.makeText(CameraImagePriview.this, "Cancelled", Toast.LENGTH_SHORT).show();
             }
         }
-
-        if (requestCode == FILTER_IMAGE) {
-            if (resultCode == Activity.RESULT_OK) {
+        if (resultCode == RESULT_OK) {
+            if (requestCode == FILTER_IMAGE) {
                 if (data != null) {
+                    Uri imageUri = data.getData();
                     try {
-
-                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
+                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
                         ivCapture.setImageBitmap(bitmap);
-
                     } catch (Exception e) {
                         e.printStackTrace();
+                        Log.d("ERRRO@#", "" + e.toString());
                     }
                 }
             }
+        } else {
+            Toast.makeText(CameraImagePriview.this, "Not edited", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    class getCurrencyCode extends AsyncTask<String,String,String>
+    {
+        private ProgressDialog pd;
+        @Override
+        protected void onPreExecute() {
+            pd=new ProgressDialog(CameraImagePriview.this);
+            pd.setMessage("Loading...");
+            pd.setCancelable(false);
+            pd.isShowing();
+            super.onPreExecute();
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            Log.d("Url",""+Utils.getResponseofGet(Constant.Base_URL +"currency.php"));
+            return Utils.getResponseofGet(Constant.Base_URL +"currency.php");
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            arrayListPrice = new ArrayList<>();
+            pd.dismiss();
+            super.onPostExecute(s);
+            try {
+                JSONObject jsonObject = new JSONObject(s);
+                if (jsonObject.getString("status").equalsIgnoreCase("true")) {
+                    JSONArray jsonArray = jsonObject.getJSONArray("data");
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject getcurobject = jsonArray.getJSONObject(i);
+                        String addcurr = getcurobject.getString("code");
+                        arrayListPrice.add(addcurr);
+                    }
+                    Log.d("ARRAYLST",""+arrayListPrice);
+                }
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+
+        }
+
     }
 }

@@ -7,6 +7,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +20,6 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.example.archi1.piccity.Adapter.ArtGalleryAdapter;
 import com.example.archi1.piccity.Constant.Constant;
@@ -35,31 +37,20 @@ import java.util.ArrayList;
  * Created by archi1 on 11/25/2016.
  */
 
-public class ArtGalleryFragment extends android.support.v4.app.Fragment implements View.OnClickListener {
-
-
+public class ArtGalleryFragment extends Fragment implements View.OnClickListener {
     public Utils utils;
     public Bitmap bitmap;
     public ArrayList<ArtGallery> artGalleryArrayList;
     public ArtGalleryAdapter artGalleryAdapter;
-
     public ArrayList<String> categoryIdArray;
     public ArrayList<String> categoryNameArry;
-
-
-    public GridView artPhotoGridView;
+    public RecyclerView artPhotosRecyclerView;
     public String userId;
-    public TextView textView;
-    public String strSelectedImage;
     public Spinner spnerCategory;
-
-    public ImageView dialogCaptureImage;
-    public String strPrice, strLctn, strDesc;
     public LinearLayout fragmentLinearlayout;
     public String selectedCategoryList;
     public ImageView ivSearch;
     public ArrayList<ArtGallery> filterCategoryNameArray;
-    String uNameStr, uPwdStr;
     public ArrayList<String> arrayUserName;
 
     @Override
@@ -69,9 +60,8 @@ public class ArtGalleryFragment extends android.support.v4.app.Fragment implemen
         init(view);
         utils = new Utils(getActivity());
         ((Activity) getActivity()).setTitle(R.string.art_list);
-
-        userId = utils.ReadSharePrefrence(getActivity(), Constant.UserId);
-        artPhotoGridView = (GridView) view.findViewById(R.id.fragment_art_gallery_grid);
+        userId = Utils.ReadSharePrefrence(getActivity(), Constant.UserId);
+        artPhotosRecyclerView = (RecyclerView) view.findViewById(R.id.fragment_art_gallery_list);
         fragmentLinearlayout = (LinearLayout) view.findViewById(R.id.fragment_art_gallery_ll_camera);
         spnerCategory = (Spinner) view.findViewById(R.id.spnrCategoryArtGallery);
         ivSearch = (ImageView) view.findViewById(R.id.ivSearchArtGallery);
@@ -99,10 +89,7 @@ public class ArtGalleryFragment extends android.support.v4.app.Fragment implemen
     public void onClick(View v) {
 
         switch (v.getId()) {
-
             case R.id.fragment_art_gallery_ll_camera:
-                Log.d("gopu", "click");
-
                 Bundle bundle = new Bundle();
                 bundle.putString("Royalty", "isCameara");
                 Fragment fragment = new SaleStuffFragment();
@@ -112,26 +99,22 @@ public class ArtGalleryFragment extends android.support.v4.app.Fragment implemen
                 fragmentTransaction.replace(R.id.container_body, fragment);
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
-
                 break;
 
             case R.id.ivSearchArtGallery:
-
                 if (filterCategoryNameArray != null) {
                     filterCategoryNameArray.clear();
                 }
 
                 if (selectedCategoryList.equalsIgnoreCase("all")) {
-
                     artGalleryAdapter = new ArtGalleryAdapter(getActivity(), artGalleryArrayList);
-                    artPhotoGridView.setAdapter(artGalleryAdapter);
+                    artPhotosRecyclerView.setAdapter(artGalleryAdapter);
                     artGalleryAdapter.notifyDataSetChanged();
                     Log.d("msg", "filter if" + artGalleryArrayList.size());
 
                 } else {
 
                     Log.d("msg", "filter else " + filterCategoryNameArray.toString());
-
                     for (int i = 0; i < artGalleryArrayList.size(); i++) {
                         String name = artGalleryArrayList.get(i).getCategory();
                         if (selectedCategoryList.equalsIgnoreCase(name)) {
@@ -140,7 +123,7 @@ public class ArtGalleryFragment extends android.support.v4.app.Fragment implemen
                     }
 
                     artGalleryAdapter = new ArtGalleryAdapter(getActivity(), filterCategoryNameArray);
-                    artPhotoGridView.setAdapter(artGalleryAdapter);
+                    artPhotosRecyclerView.setAdapter(artGalleryAdapter);
                     artGalleryAdapter.notifyDataSetChanged();
                 }
                 Log.d("msg", "filter " + filterCategoryNameArray.toString());
@@ -163,9 +146,9 @@ public class ArtGalleryFragment extends android.support.v4.app.Fragment implemen
 
         @Override
         protected String doInBackground(String... params) {
+            //http://web-medico.com/web1/pic_citi/Api/get_category_list.php
             String urlGetCategory = Constant.Base_URL + "get_category_list.php";
             return utils.MakeServiceCall(urlGetCategory);
-
         }
 
         @Override
@@ -173,45 +156,34 @@ public class ArtGalleryFragment extends android.support.v4.app.Fragment implemen
             super.onPostExecute(s);
             progressDialog.dismiss();
             try {
-
                 categoryIdArray.add("5");
                 categoryNameArry.add("all");
-
                 JSONObject jsonObject = new JSONObject(s);
                 String status = jsonObject.getString("status");
-
                 if (status.equalsIgnoreCase("true")) {
                     JSONArray jsonArrayData = jsonObject.getJSONArray("data");
                     for (int i = 0; i < jsonArrayData.length(); i++) {
-
                         JSONObject jsonObjectData = jsonArrayData.getJSONObject(i);
                         String categoryid = jsonObjectData.getString("category_id");
                         String categoryName = jsonObjectData.getString("category_name");
-
                         categoryIdArray.add(categoryid);
                         categoryNameArry.add(categoryName);
-
-
                     }
-
-
                     ArrayAdapter<String> spnerCategoryadapter = new ArrayAdapter<String>(getActivity(), R.layout.spinner_item_view, categoryNameArry);
                     spnerCategory.setAdapter(spnerCategoryadapter);
-
+                    spnerCategoryadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spnerCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
                         @Override
                         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                             selectedCategoryList = categoryNameArry.get(position);
                             Log.d("msg", "selected category " + selectedCategoryList);
                         }
-
                         @Override
                         public void onNothingSelected(AdapterView<?> parent) {
 
                         }
                     });
-
-
                 }
             } catch (JSONException e1) {
                 e1.printStackTrace();
@@ -227,53 +199,51 @@ public class ArtGalleryFragment extends android.support.v4.app.Fragment implemen
         protected void onPreExecute() {
             super.onPreExecute();
             artGalleryArrayList = new ArrayList<>();
+            pd = new ProgressDialog(getActivity());
+            pd.setMessage("Loading...");
+            pd.setCancelable(false);
+            pd.show();
         }
 
 
         @Override
         protected String doInBackground(String... params) {
-            /*http://web-medico.com/web1/pic_citi/Api/get_upload_image.php?user_id=25*/
-
-            /*http://web-medico.com/web1/pic_citi/Api/get_alluser_upload.php*/
-            String Url = Constant.Base_URL + "get_alluser_upload.php";
+           //http://web-medico.com/web1/pic_citi/Api/get_alluser_upload_new.php
+            String Url = Constant.Base_URL + "get_alluser_upload_new.php";
             Log.d("UploadUrl", Url);
-
-            return utils.getResponseofGet(Url);
+            return Utils.getResponseofGet(Url);
         }
 
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
+            pd.dismiss();
            /* //.dismiss();*/
-            Log.d("msg", "ArtGAllery" + s);
+            Log.d("RESPONSE", "ArtGAllery" + s);
             try {
-
                 JSONObject jsonObject = new JSONObject(s);
-
                 if (jsonObject.getString("status").equalsIgnoreCase("true")) {
                     JSONArray jsonArray = jsonObject.getJSONArray("data");
                     for (int i = 0; i < jsonArray.length(); i++) {
-
                         JSONObject object = jsonArray.getJSONObject(i);
                         ArtGallery artGallery = new ArtGallery();
                         artGallery.setId(object.getString("id"));
                         artGallery.setImage(object.getString("image"));
                         artGallery.setPrice(object.getString("price"));
                         artGallery.setDescription(object.getString("description"));
-                        //  artGallery.setLocation(object.getString("location"));
                         artGallery.setUsername(object.getString("user_name"));
                         artGallery.setName(object.getString("name"));
                         artGallery.setUserId(object.getString("user_id"));
                         artGallery.setCategory(object.getString("category_name"));
                         artGallery.setCurrency(object.getString("currency"));
-                        Log.d("Image", object.getString("image"));
+                        artGallery.setPaypalEmail(object.getString("paypal_email"));
                         artGalleryArrayList.add(artGallery);
                     }
-
-                    Log.d("artGAllery", artGalleryArrayList.toString());
                     artGalleryAdapter = new ArtGalleryAdapter(getActivity(), artGalleryArrayList);
-                    artPhotoGridView.setAdapter(artGalleryAdapter);
-
+                    RecyclerView.LayoutManager mLayoutManager= new LinearLayoutManager(getActivity());
+                    artPhotosRecyclerView.setLayoutManager(mLayoutManager);
+                    artPhotosRecyclerView.setItemAnimator(new DefaultItemAnimator());
+                    artPhotosRecyclerView.setAdapter(artGalleryAdapter);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();

@@ -1,12 +1,11 @@
 package com.example.archi1.piccity.Fragment;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.graphics.PixelFormat;
+import android.graphics.Bitmap;
 import android.hardware.Camera;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.support.annotation.Nullable;
+import android.os.Environment;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -16,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.archi1.piccity.Activity.CameraImagePriview;
+import com.example.archi1.piccity.Constant.ImageFilePath;
 import com.example.archi1.piccity.Constant.Utils;
 import com.example.archi1.piccity.R;
 
@@ -24,91 +24,96 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-/**
- * Created by archi1 on 11/29/2016.
- */
+import static android.app.Activity.RESULT_OK;
 
-public class SaleStuffFragment extends android.support.v4.app.Fragment implements SurfaceHolder.Callback {
-
+/*** Created by archi1 on 11/29/2016.*/
+public class SaleStuffFragment extends Fragment implements SurfaceHolder.Callback {
     public Camera camera;
     public SurfaceView surfaceView;
+    public String galleryImgPath;
     public SurfaceHolder surfaceHolder;
     public boolean previewing = false, flash = true;
-    public LayoutInflater controlInflater = null;
     public int currentCameraId = 0;
     public ImageView camera_changeview, camera_flash, camera_capture_image, gallery_image;
     public Camera.PictureCallback jpegCallback;
     public int i = 1;
+    private static final int SELECT_PICTURE = 100;
+    private static final int EditImageResult = 101;
+    public Bitmap bitmap;
     public View rootView;
     public Utils utils;
-    private int RESULT_LOAD_IMG = 201;
-    private String isRoyality="SaleStuff";
+    private String isRoyality = "SaleStuff";
 
-    @Nullable
+
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == SELECT_PICTURE) {
+                galleryImgPath = ImageFilePath.getPath(getActivity(), data.getData());
+                Intent editIntent = new Intent(Intent.ACTION_EDIT);
+                editIntent.setDataAndType(data.getData(), "image");
+                editIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                startActivity(Intent.createChooser(editIntent, null));
 
+                /*Intent intentEditImage = new Intent(Intent.ACTION_EDIT);
+                intentEditImage.setDataAndType(Uri.parse(galleryImgPath), "image*//*");
+                startActivityForResult(intentEditImage, EditImageResult);
+
+                Intent intent = new Intent(getActivity(), CameraImagePriview.class);
+                intent.putExtra("GalleryImagePath", galleryImgPath);
+                intent.putExtra("status", "gallery");
+                intent.putExtra("ActivitStatus", isRoyality);
+                startActivity(intent);*/
+            }
+        }
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_sale_stuff, container, false);
         utils = new Utils(getActivity());
-
         init();
-
         Bundle bundle = getArguments();
         if (bundle != null) {
             isRoyality = bundle.getString("Royalty");
-
         }
-        //((Activity) getActivity()).setTitle(R.string.camera);
-
         return rootView;
     }
 
-
     @Override
     public void onResume() {
-        //getActivity().setTitle(R.string.art_list);
         super.onResume();
-        //((Activity) getActivity()).setTitle(R.string.camera);
+        getActivity().setTitle(R.string.camera);
 
     }
-
     private void init() {
         gallery_image = (ImageView) rootView.findViewById(R.id.fragment_camera_gallery);
         surfaceView = (SurfaceView) rootView.findViewById(R.id.camerapreview);
-        /*surfaceView.setZOrderOnTop(true);
-        SurfaceHolder sfhtrackHolder = surfaceView.getHolder();
-        sfhtrackHolder.setFormat(PixelFormat.TRANSPARENT);*/
         camera_changeview = (ImageView) rootView.findViewById(R.id.camera_changeview);
         camera_flash = (ImageView) rootView.findViewById(R.id.camera_flash);
         camera_capture_image = (ImageView) rootView.findViewById(R.id.camera_capture_image);
         surfaceHolder = surfaceView.getHolder();
-
-
         surfaceHolder.addCallback(this);
-
-
         surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
-
         jpegCallback = new Camera.PictureCallback() {
             @Override
             public void onPictureTaken(byte[] data, Camera camera) {
                 FileOutputStream outStream = null;
                 String path = "";
-
                 try {
-
                     if (utils.isExternalStorageAvailable()) {
-                        File file = new File("/sdcard/" + getActivity().getString(R.string.app_name));
+                        File file = new File(Environment.getExternalStorageDirectory() + "/" + getActivity().getString(R.string.app_name));
                         if (file.exists()) {
-                            path = String.format(
-                                    "/sdcard/" + getActivity().getString(R.string.app_name) + "/%d.jpg", System.currentTimeMillis());
+                            path = String.format(Environment.getExternalStorageDirectory() +
+                                    "/" + getActivity().getString(R.string.app_name) + "/%d.jpg", System.currentTimeMillis());
                             outStream = new FileOutputStream(path);
                             outStream.write(data);
                             outStream.close();
                         } else {
-                            if (file.mkdir()) {
-                                path = String.format(
-                                        "/sdcard/" + getActivity().getString(R.string.app_name) + "/%d.jpg", System.currentTimeMillis());
+                            if (file.getParentFile().mkdirs()) {
+                                path = String.format(Environment.getExternalStorageDirectory() +
+                                        "/" + getActivity().getString(R.string.app_name) + "/%d.jpg", System.currentTimeMillis());
                                 outStream = new FileOutputStream(path);
                                 outStream.write(data);
                                 outStream.close();
@@ -117,18 +122,20 @@ public class SaleStuffFragment extends android.support.v4.app.Fragment implement
                             }
                         }
                     } else {
-                        File file = new File("/" + getActivity().getString(R.string.app_name));
-                        if (file.exists()) {
+                        File file = new File(Environment.getExternalStorageDirectory() + "/" + getActivity().getString(R.string.app_name));
+
+                        // File file = new File("/" + getActivity().getString(R.string.app_name));
+                        if (file.getParentFile().mkdirs()) {
                             path = String.format(
                                     "/" + getActivity().getString(R.string.app_name) + "/%d.jpg", System.currentTimeMillis());
                             outStream = new FileOutputStream(path);
                             outStream.write(data);
                             outStream.close();
                         } else {
-                            if (file.mkdir()) {
+                            if (file.createNewFile()) {
                                 path = String.format(
                                         "/" + getActivity().getString(R.string.app_name) + "/%d.jpg", System.currentTimeMillis());
-                                 outStream = new FileOutputStream(path);
+                                outStream = new FileOutputStream(path);
                                 outStream.write(data);
                                 outStream.close();
                             } else {
@@ -136,7 +143,6 @@ public class SaleStuffFragment extends android.support.v4.app.Fragment implement
                             }
                         }
                     }
-
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 } catch (IOException e) {
@@ -144,11 +150,10 @@ public class SaleStuffFragment extends android.support.v4.app.Fragment implement
                 } finally {
                     Bundle b = new Bundle();
                     b.putString("path", path);
-
                     Intent intent = new Intent(getActivity(), CameraImagePriview.class);
                     intent.putExtra("path", path);
                     intent.putExtra("status", "camera");
-                    intent.putExtra("ActivitStatus",isRoyality);
+                    intent.putExtra("ActivitStatus", isRoyality);
                     startActivity(intent);
                 }
             }
@@ -157,15 +162,10 @@ public class SaleStuffFragment extends android.support.v4.app.Fragment implement
         gallery_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Intent galleryIntent = new Intent(Intent.ACTION_PICK,
-                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(galleryIntent, RESULT_LOAD_IMG);
-
-
-                /*Intent galleryIntent = new Intent(Intent.ACTION_PICK,
-                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(galleryIntent, SELECT_IMAGE);*/
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent, "Select Picture"), SELECT_PICTURE);
             }
         });
 
@@ -176,16 +176,12 @@ public class SaleStuffFragment extends android.support.v4.app.Fragment implement
                     camera.stopPreview();
                 }
                 camera.release();
-
                 if (currentCameraId == Camera.CameraInfo.CAMERA_FACING_BACK) {
                     currentCameraId = Camera.CameraInfo.CAMERA_FACING_FRONT;
                 } else {
                     currentCameraId = Camera.CameraInfo.CAMERA_FACING_BACK;
                 }
                 camera = Camera.open(currentCameraId);
-//            Camera.Parameters parameters = camera.getParameters();
-//            parameters.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
-//            camera.setParameters(parameters);
                 camera.setDisplayOrientation(90);
 
                 try {
@@ -221,50 +217,19 @@ public class SaleStuffFragment extends android.support.v4.app.Fragment implement
                 }
             }
         });
-
-
         camera_capture_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 camera.takePicture(null, null, jpegCallback);
-
-
-//                if (previewing) {
-//                    camera.stopPreview();
-//                }
-//                camera.release();
-//
-////            if (currentCameraId == Camera.CameraInfo.CAMERA_FACING_BACK) {
-////                currentCameraId = Camera.CameraInfo.CAMERA_FACING_FRONT;
-////            } else {
-////                currentCameraId = Camera.CameraInfo.CAMERA_FACING_BACK;
-////            }
-//                camera = Camera.open(currentCameraId);
-////            Camera.Parameters parameters = camera.getParameters();
-////            parameters.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
-////            camera.setParameters(parameters);
-//                camera.setDisplayOrientation(90);
-//
-//                try {
-//                    camera.setPreviewDisplay(surfaceHolder);
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//                camera.startPreview();
-
             }
         });
-
-
     }
 
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-
         camera = Camera.open(0);
         camera.setDisplayOrientation(90);
-
         Camera.Parameters parameters = camera.getParameters();
         if (parameters.getSupportedFocusModes().contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE)) {
             parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
@@ -274,12 +239,10 @@ public class SaleStuffFragment extends android.support.v4.app.Fragment implement
 
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-
         if (previewing) {
             camera.stopPreview();
             previewing = false;
         }
-
         if (camera != null) {
             try {
                 camera.setPreviewDisplay(surfaceHolder);

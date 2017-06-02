@@ -1,18 +1,14 @@
 package com.example.archi1.piccity.Activity;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -24,45 +20,38 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Base64;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.util.Util;
 import com.example.archi1.piccity.Constant.Constant;
 import com.example.archi1.piccity.Constant.Utils;
-import com.example.archi1.piccity.Fragment.AList;
 import com.example.archi1.piccity.Fragment.ArtGalleryFragment;
+import com.example.archi1.piccity.Fragment.CanvasImagesListFragment;
+import com.example.archi1.piccity.Fragment.ChatFragment;
 import com.example.archi1.piccity.Fragment.GalleryFragment;
 import com.example.archi1.piccity.Fragment.MyGallery;
-import com.example.archi1.piccity.Fragment.PersonalArtistFragment;
+import com.example.archi1.piccity.Fragment.PicCitiFriendsFragment;
 import com.example.archi1.piccity.Fragment.RoyaltyPicFragment;
 import com.example.archi1.piccity.Fragment.SaleStuffFragment;
 import com.example.archi1.piccity.R;
-import com.facebook.CallbackManager;
-import com.facebook.share.model.ShareLinkContent;
-import com.facebook.share.widget.ShareButton;
-import com.facebook.share.widget.ShareDialog;
+import com.squareup.picasso.Picasso;
 
-import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
-import static android.R.id.toggle;
+import de.hdodenhof.circleimageview.CircleImageView;
+
 import static com.example.archi1.piccity.R.id.text;
-import static com.example.archi1.piccity.R.id.view;
 
-
-public class MainActivity extends AppCompatActivity implements FragmentDrawer.FragmentDrawerListener {
-
+public class
+MainActivity extends AppCompatActivity implements FragmentDrawer.FragmentDrawerListener {
     private static String TAG = MainActivity.class.getSimpleName();
-
     public String strImgProfile = "";
     public Toolbar mToolbar;
     private FragmentDrawer drawerFragment;
     public DrawerLayout mDrawerLayout;
+    public CircleImageView imageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,17 +60,16 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        // getActionBar().setDisplayHomeAsUpEnabled(true);
-
         ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(
                 this, mDrawerLayout, mToolbar, R.string.app_name, R.string.app_name);
         mDrawerLayout.addDrawerListener(mDrawerToggle);
         mDrawerToggle.syncState();
         mDrawerToggle.setDrawerIndicatorEnabled(false);
         Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.menu, getApplicationContext().getTheme());
+        //Drawable drawable1 = ResourcesCompat.getDrawable(getResources(), R.drawable.user_back_pic, getApplicationContext().getTheme());
         mDrawerToggle.setHomeAsUpIndicator(drawable);
+        //mDrawerToggle.setHomeAsUpIndicator(drawable1);
 
         mDrawerToggle.setToolbarNavigationClickListener(new View.OnClickListener() {
             @Override
@@ -96,35 +84,17 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
         drawerFragment = (FragmentDrawer)
                 getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
-
-
         TextView textView = (TextView) findViewById(R.id.nav_header_username);
         textView.setText(Utils.ReadSharePrefrence(MainActivity.this, Constant.Name));
-        ImageView imageView = (ImageView) findViewById(R.id.nav_header_image);
-        //strImgProfile = Utils.ReadSharePrefrence(MainActivity.this,Constant.Image);
-        Glide.with(MainActivity.this).load(Utils.ReadSharePrefrence(MainActivity.this, Constant.Image)).placeholder(R.drawable.ic_profile).into(imageView);
-
-        /* if (strImgProfile.equalsIgnoreCase(""))
-       {
-
-           Glide.with(MainActivity.this).load().placeholder(R.drawable.ic_profile).into(imageView);
-       }
-       else
-       {*/
-        // Glide.with(MainActivity.this).load(strImgProfile).placeholder(R.drawable.ic_profile).into(imageView);
-
-
+        imageView = (CircleImageView) findViewById(R.id.nav_header_image);
+        strImgProfile = Utils.ReadSharePrefrence(MainActivity.this,Constant.Image);
+        Picasso.with(MainActivity.this).load(strImgProfile).placeholder(R.mipmap.ic_launcher).into(imageView);
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
         drawerFragment.setDrawerListener(this);
-
-
         displayView(0);
 
-
         if (checkPermissionForCamera()) {
-
         } else {
-
             requestPermissionForCamera();
         }
 
@@ -138,9 +108,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         }
 
         if (checkPermissionForReadExternalStorage()) {
-
         } else {
-
             requestPermissionForReadExternalStorage();
 
         }
@@ -149,13 +117,11 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
     @Override
     public void onDrawerItemSelected(View view, int position) {
-
         displayView(position);
 
     }
 
     private void displayView(int position) {
-
         Fragment fragment = null;
         String title = getString(R.string.app_name);
 
@@ -163,67 +129,45 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             case 0:
                 fragment = new GalleryFragment();
                 title = getString(R.string.gallery);
-                Toast.makeText(getApplicationContext(), "gallery", Toast.LENGTH_SHORT).show();
                 break;
-
-
             case 1:
                 fragment = new SaleStuffFragment();
                 title = getString(R.string.camera);
-                Toast.makeText(getApplicationContext(), "Sale Your Art", Toast.LENGTH_SHORT).show();
                 break;
-
             case 2:
                 fragment = new MyGallery();
                 title = getString(R.string.mygallery);
-                Toast.makeText(getApplicationContext(), "My Gallery", Toast.LENGTH_SHORT).show();
                 break;
             case 3:
                 fragment = new ArtGalleryFragment();
                 title = getString(R.string.alist);
-                Toast.makeText(getApplicationContext(), "A List", Toast.LENGTH_SHORT).show();
                 break;
-/*
-            case 3:
-     *//*           fragment = new ArtGalleryFragment();
-                title = getString(R.string.art_list);
-                Toast.makeText(getApplicationContext(), "art_list", Toast.LENGTH_SHORT).show();
-     *//*           break;*/
-
             case 4:
                 fragment = new RoyaltyPicFragment();
                 title = getString(R.string.royalty);
-                Toast.makeText(getApplicationContext(), "royalty", Toast.LENGTH_SHORT).show();
                 break;
-
             case 5:
+                fragment = new ChatFragment();
+                title = getString(R.string.chat);
                 break;
 
-            case 6:
+            case  6:
+                fragment = new CanvasImagesListFragment();
+                title = getString(R.string.canvaspic);
                 break;
 
             case 7:
-                fragment = new PersonalArtistFragment();
+                fragment = new PicCitiFriendsFragment();
                 title = getString(R.string.personal_artist);
                 break;
 
             case 8:
-                title = getString(R.string.logout);
-                Utils.clearSharedPreferenceData(MainActivity.this);
-                Intent in = new Intent(MainActivity.this, LoginActivity.class);
-                in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(in);
-                finish();
-                break;
-            case 9:
-
                 Intent shareIntent = new Intent(Intent.ACTION_SEND);
                 shareIntent.setType("text/plain");
                 Intent chooserIntent = Intent.createChooser(shareIntent, "Share image via...");
                 String link = "www.playstore.com";
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-
                     shareIntent.putExtra(Intent.EXTRA_TEXT, text + " " + link);
                     Bundle facebookBundle = new Bundle();
                     facebookBundle.putString(Intent.EXTRA_TEXT, link);
@@ -233,11 +177,20 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 } else {
                     shareIntent.putExtra(Intent.EXTRA_TEXT, link);
                 }
-
                 chooserIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(chooserIntent);
-                default:
-                    break;
+                break;
+
+            case 9:
+                title = getString(R.string.logout);
+                Utils.clearSharedPreferenceData(MainActivity.this);
+                Intent in = new Intent(MainActivity.this, LoginActivity.class);
+                in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(in);
+                finish();
+                break;
+            default:
+                break;
         }
 
         if (fragment != null) {
@@ -246,8 +199,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             fragmentTransaction.replace(R.id.container_body, fragment);
             fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
-            // set the toolbar title
-            getSupportActionBar().setTitle(title);
         }
     }
 
@@ -255,11 +206,22 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == 1) {
+                Uri uri = data.getData();
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                image(uri);
+            }
+        }
+    }
 
-        Uri uri = data.getData();
-        Log.d("gopluu", "vijay " + uri);
-
+    private void image(Uri uri) {
         Intent intent = new Intent(MainActivity.this, CameraImagePriview.class);
+        Log.d("gopluu", "vijay " + uri);
         intent.putExtra("GalleryImagePath", uri.toString());
         intent.putExtra("status", "gallery");
         startActivity(intent);

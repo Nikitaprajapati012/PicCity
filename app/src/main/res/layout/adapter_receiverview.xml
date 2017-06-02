@@ -13,7 +13,6 @@
         android:layout_height="wrap_content"
         android:gravity="left"
         android:padding="@dimen/_5sdp"
-        android:text="abcd"
         android:textColor="@color/cardview_dark_background"
         android:textSize="@dimen/_18sdp" />
 

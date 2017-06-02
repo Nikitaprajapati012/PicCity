@@ -5,23 +5,19 @@ import android.app.DownloadManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,52 +27,38 @@ import com.example.archi1.piccity.Constant.Utils;
 import com.example.archi1.piccity.Model.GalleryDetails;
 import com.example.archi1.piccity.Model.SizePrice;
 import com.example.archi1.piccity.R;
+import com.google.gson.Gson;
 import com.paypal.android.sdk.payments.PayPalConfiguration;
 import com.paypal.android.sdk.payments.PayPalPayment;
 import com.paypal.android.sdk.payments.PayPalService;
 import com.paypal.android.sdk.payments.PaymentActivity;
 import com.paypal.android.sdk.payments.PaymentConfirmation;
 
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.math.BigDecimal;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-
-import static android.R.id.input;
-import static com.paypal.android.sdk.payments.PayPalConfiguration.ENVIRONMENT_PRODUCTION;
-import static com.paypal.android.sdk.payments.PayPalConfiguration.ENVIRONMENT_SANDBOX;
 
 public class GalleryDetailsActivity extends AppCompatActivity implements View.OnClickListener {
     public Utils utils;
-    public String imgID, imgOriginal, imgCanvas, imgTitle, imgSizePrice;
+    public String imgID, imgOriginal, imgCanvas, imgTitle, imgSizePrice,transactionId;
     public ImageView ivHeader, header_iv_back;
     public TextView tvImgTiitle, tvImgPrice;
     public Spinner spImgSize;
     public ArrayList<SizePrice> arraylistSizePrize;
+    public GalleryDetails details;
     public Button imageBuy;
-    public RelativeLayout mRelativeSizePrice;
+    public LinearLayout mRelativeSizePrice;
     public String ImagePrice;
     public PayPalPayment payment;
     public Button btnGlryDetailSendToMyGallery, btnGlrDetlaiPasteMe, btnGlrtDetailCanvasMyPic;
     String size;
     String price;
     String id;
-    public String payment_id;
-    public static final int PAYPAL_REQUEST_CODE = 123;
     private static PayPalConfiguration config = new PayPalConfiguration()
             .environment(PayPalConfiguration.ENVIRONMENT_SANDBOX)
             .clientId(Constant.CLIENT_ID);
@@ -87,11 +69,8 @@ public class GalleryDetailsActivity extends AppCompatActivity implements View.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gallery_details);
-
         utils = new Utils(GalleryDetailsActivity.this);
-
-
-        amountGalleryImage = 2.99;
+        amountGalleryImage = 3.00;
         amountPayStr = 15.00;
 
         bindData();
@@ -100,17 +79,13 @@ public class GalleryDetailsActivity extends AppCompatActivity implements View.On
         Intent intent = new Intent(this, PayPalService.class);
         intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, config);
         startService(intent);
-
         arraylistSizePrize = new ArrayList<>();
-
         if (utils.isConnectingToInternet()) {
             init();
 
         } else {
             Toast.makeText(GalleryDetailsActivity.this, "No Internet Connection", Toast.LENGTH_SHORT).show();
         }
-
-
     }
 
     private void bindData() {
@@ -123,16 +98,13 @@ public class GalleryDetailsActivity extends AppCompatActivity implements View.On
         spImgSize = (Spinner) findViewById(R.id.activity_glry_size_spinner);
         imageBuy = (Button) findViewById(R.id.btn_buy_gallery_image);
         header_iv_back = (ImageView) findViewById(R.id.header_iv_back);
-
-        mRelativeSizePrice = (RelativeLayout) findViewById(R.id.activity_gallery_detail_sizeprice_layout);
+        mRelativeSizePrice = (LinearLayout) findViewById(R.id.activity_gallery_detail_sizeprice_layout);
         mRelativeSizePrice.setVisibility(View.INVISIBLE);
-
-
+        ivHeader.setScaleType(ImageView.ScaleType.FIT_CENTER);
         imageBuy.setOnClickListener(this);
         btnGlryDetailSendToMyGallery.setOnClickListener(this);
         btnGlrDetlaiPasteMe.setOnClickListener(this);
         btnGlrtDetailCanvasMyPic.setOnClickListener(this);
-
         header_iv_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -142,27 +114,24 @@ public class GalleryDetailsActivity extends AppCompatActivity implements View.On
     }
 
     private void init() {
-
         if (getIntent().getExtras() != null) {
-
-            imgID = getIntent().getExtras().getString("id");
-            imgTitle = getIntent().getExtras().getString("title");
-            imgOriginal = getIntent().getExtras().getString("image");
-            imgCanvas = getIntent().getExtras().getString("canvasImage");
-            imgSizePrice = getIntent().getExtras().getString("sizePrice");
-            Log.d("BASE64", "" + imgOriginal);
-
-            Log.d("sizePrice", imgSizePrice);
+            details=new GalleryDetails();
+            Gson gson = new Gson();
+            String strDetails=getIntent().getExtras().getString("canvaspicdetails");
+            details=gson.fromJson(strDetails,GalleryDetails.class);
+            imgID = details.getId();
+            imgTitle = details.getName();
+            imgOriginal=details.getImage();
+            imgCanvas =details.getCanvas_image();
+            imgSizePrice=Utils.ReadSharePrefrence(getApplicationContext(), Constant.CanvasSizePrice);
             try {
-                JSONArray jsonArray = new JSONArray(imgSizePrice.toString());
+                JSONArray jsonArray = new JSONArray(imgSizePrice);
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
-
                     SizePrice sizePrice = new SizePrice();
                     id = jsonObject.getString("id");
                     price = jsonObject.getString("price");
                     size = jsonObject.getString("size");
-
                     sizePrice.setId(id);
                     sizePrice.setPrice(price);
                     sizePrice.setSize(size);
@@ -181,14 +150,11 @@ public class GalleryDetailsActivity extends AppCompatActivity implements View.On
             ArrayList<String> imageSize = new ArrayList<>();
             for (int i = 0; i < arraylistSizePrize.size(); i++) {
                 imageSize.add(arraylistSizePrize.get(i).getSize());
-
             }
 
             ArrayAdapter<String> spinnerArrayadapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, imageSize);
             spinnerArrayadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spImgSize.setAdapter(spinnerArrayadapter);
-
-
         }
 
         spImgSize.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -198,12 +164,9 @@ public class GalleryDetailsActivity extends AppCompatActivity implements View.On
                 tvImgPrice.setText(ImagePrice);
                 String payPrice = ImagePrice.substring(1);
                 amountPayStr = Double.valueOf(payPrice);
-                //tvImgPrice.setText("Price :"+arraylistSizePrize.get(position).getPrice());
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
     }
@@ -211,9 +174,9 @@ public class GalleryDetailsActivity extends AppCompatActivity implements View.On
 
     public void onBuyPressed(View pressed) {
 
-        payment = new PayPalPayment(new BigDecimal(amountGalleryImage), "USD", "Say Post",
+        payment = new PayPalPayment(new BigDecimal(amountGalleryImage), "USD", "Pic Citi",
                 PayPalPayment.PAYMENT_INTENT_SALE);
-
+        payment.custom("");
         Intent intent = new Intent(this, PaymentActivity.class);
         intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, config);
         intent.putExtra(PaymentActivity.EXTRA_PAYMENT, payment);
@@ -228,7 +191,6 @@ public class GalleryDetailsActivity extends AppCompatActivity implements View.On
                 break;
 
             case R.id.activity_gallery_detail_send_my_gallery:
-
                 onBuyPressed(v);
                 Toast.makeText(getApplicationContext(), "You Clicked Send To My Gallery", Toast.LENGTH_SHORT).show();
                 break;
@@ -252,25 +214,24 @@ public class GalleryDetailsActivity extends AppCompatActivity implements View.On
                 break;
         }
     }
-
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK) {
-
-
             PaymentConfirmation confirm = data.getParcelableExtra(PaymentActivity.EXTRA_RESULT_CONFIRMATION);
             if (confirm != null) {
                 try {
                     Log.i("paymentExampleFull", payment.toJSONObject().toString());
                     Log.i("paymentExample", confirm.toJSONObject().toString(4));
-
                     String Respond = confirm.toJSONObject().toString(4);
-
                     JSONObject jsonObject = new JSONObject(Respond);
                     JSONObject main = jsonObject.getJSONObject("response");
-                    final String transactionId = jsonObject.getJSONObject("response").getString("id");
+                    transactionId = jsonObject.getJSONObject("response").getString("id");
+                    Log.d("user_id", Utils.ReadSharePrefrence(getApplicationContext(), Constant.UserId));
                     Log.d("transactionId", transactionId);
+                    Log.d("imgid", imgID);
+                    Log.d("imgprice", ImagePrice);
+                    Log.d("img", imgCanvas);
+
                     new AddPayamentInfo(transactionId).execute();
 
                     if (main.getString("state").equalsIgnoreCase("approved")) {
@@ -310,27 +271,12 @@ public class GalleryDetailsActivity extends AppCompatActivity implements View.On
         }
     }
 
-    public static String getFileToByte(String path) {
-        Bitmap bm = null;
-        ByteArrayOutputStream baos = null;
-        byte[] b = null;
-        String encodeString = null;
-        try {
-            bm = BitmapFactory.decodeFile(path);
-            baos = new ByteArrayOutputStream();
-            bm.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-            b = baos.toByteArray();
-            encodeString = Base64.encodeToString(b, Base64.DEFAULT);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return encodeString;
-    }
 
-    class AddPayamentInfo extends AsyncTask<String, String, String> {
+    class AddPayamentInfo extends AsyncTask<String,String,String> {
         public String transactionId;
         ProgressDialog pd;
         String user_id;
+        //HashMap<String,String> hashMap;
         HashMap<String, String> hashMap = new HashMap<>();
 
         public AddPayamentInfo(String transactionId) {
@@ -341,43 +287,45 @@ public class GalleryDetailsActivity extends AppCompatActivity implements View.On
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            user_id = Utils.ReadSharePrefrence(GalleryDetailsActivity.this, Constant.USER_ID);
+            user_id =  Utils.ReadSharePrefrence(GalleryDetailsActivity.this,Constant.USER_ID);
             pd = new ProgressDialog(GalleryDetailsActivity.this);
             pd.setMessage("Please Wait...");
             pd.setCancelable(false);
             pd.setCanceledOnTouchOutside(false);
-            hashMap.put("user_id", user_id);
-            hashMap.put("imgid", imgID);
-            hashMap.put("img", getFileToByte(imgOriginal));
-            hashMap.put("imgprice", ImagePrice);
-            hashMap.put("transaction_id", transactionId);
+            hashMap.put("user_id",user_id);
+            hashMap.put("imgid",imgID);
+            hashMap.put("imgprice",ImagePrice);
+            hashMap.put("transaction_id",transactionId);
             pd.isShowing();
         }
 
         @Override
         protected String doInBackground(String... params) {
-            String url_insert_img =  Utils.getResponseofPost(Constant.Base_URL + "image.php", hashMap);
-            Log.d("URL",""+url_insert_img);
-            return Utils.getResponseofGet(url_insert_img);
-
+            return Utils.getResponseofPost(Constant.Base_URL+"image.php", hashMap);
             // return utils.getResponseofGet(Constant.Base_URL + "image.php"+"user_id="+user_id+"&imgid="+imgID+"&img="+imgOriginal+"&imgprice="+imgSizePrice+"&transaction_id="+payment_id);
         }
 
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            Log.d("RESPONSE", s);
-            Log.d("RESPONSE_ID", user_id);
+            Log.d("Re",s);
+            Log.d("Re",user_id);
             pd.dismiss();
-            try {
+            Toast.makeText(GalleryDetailsActivity.this, "fgh"+user_id, Toast.LENGTH_SHORT).show();
+            try{
                 JSONObject jsonObject = new JSONObject(s);
-                if (jsonObject.getString("status").equalsIgnoreCase("true")) {
-                    Toast.makeText(GalleryDetailsActivity.this, "Success" + jsonObject.getString("msg"), Toast.LENGTH_SHORT).show();
+                if (jsonObject.getString("status").equalsIgnoreCase("true"))
+                {
                     //Toast.makeText(GalleryDetailsActivity.this, "Successffully Inserted...", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(GalleryDetailsActivity.this, "Error" + jsonObject.getString("msg"), Toast.LENGTH_SHORT).show();
                 }
-            } catch (Exception e) {
+                else
+                {
+                    Toast.makeText(GalleryDetailsActivity.this, "Error"+jsonObject.getString("msg"), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            catch (Exception e)
+            {
                 e.printStackTrace();
             }
         }

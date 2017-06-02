@@ -5,18 +5,25 @@
     android:orientation="vertical">
 
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="match_parent">
     <ImageView
         android:id="@+id/iv_art_image"
         android:layout_width="@dimen/_135sdp"
         android:layout_height="@dimen/_135sdp"
         android:layout_margin="@dimen/_5sdp"
-        android:scaleType="centerCrop" />
+        android:scaleType="centerCrop"
+        android:src="@mipmap/ic_launcher"/>
 
     <TextView
         android:id="@+id/tv_image_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ellipsize="end"
+        android:layout_gravity="center|left"
+        android:gravity="center|left"
         android:padding="@dimen/_5sdp"
         android:text="Description"
         android:textSize="@dimen/_12sdp" />
@@ -29,10 +36,5 @@
         android:alpha="0.2"
         android:background="@color/black" />
 
-
-
-
-
-
-
+</LinearLayout>
 </LinearLayout>

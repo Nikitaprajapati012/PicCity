@@ -1,54 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
         <LinearLayout
-         android:layout_width="53dp"
-            android:layout_height="46dp"
-            android:layout_marginTop="@dimen/_20sdp">
-            <ImageView
-                android:id="@+id/ivBack"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@drawable/ic_back">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="4"
+            android:layout_margin="@dimen/_5sdp"
+            android:orientation="vertical">
 
-                </ImageView>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="139dp">
-            <ImageView
-                android:id="@+id/ivUser_image"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@drawable/ic_profile"/>
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginTop="@dimen/_20sdp">
 
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="77dp">
-            <TextView
-                android:id="@+id/tvName"
+                <ImageView
+                    android:id="@+id/ivBack"
+                    android:layout_gravity="center|left|top"
+                    android:layout_width="53dp"
+                    android:gravity="center|left|top"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_back"/>
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textColor="@color/blue"
-                />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="90dp">
-            <TextView
-                android:id="@+id/tvPrice"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/ivUser_image"
+                    android:layout_width="@dimen/_200sdp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:layout_height="@dimen/_200sdp"
+                    android:src="@drawable/ic_profile" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                />
+                android:layout_height="77dp"
+                android:layout_weight="1"
+                android:layout_gravity="center|left"
+                android:gravity="center|left"
+                android:layout_marginTop="@dimen/_10sdp">
+
+                <TextView
+                    android:id="@+id/tvName"
+                    android:padding="@dimen/_5sdp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@string/imagename"/>
+            </LinearLayout>
+
+            <!--<LinearLayout
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:layout_height="90dp">
+                <TextView
+                    android:id="@+id/tvPrice"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@string/imageprice" />
+            </LinearLayout>-->
         </LinearLayout>
-    </LinearLayout>
+    </ScrollView>
 </LinearLayout>
