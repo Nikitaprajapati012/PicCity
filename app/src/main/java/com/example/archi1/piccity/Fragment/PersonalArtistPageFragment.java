@@ -85,7 +85,7 @@ public class PersonalArtistPageFragment extends Fragment implements TabLayout.On
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_personal_artist_page, container, false);
         ButterKnife.bind(this, view);
-        //initial commmit pic
+        //initial  pic
         init();
         tabLayout = (TabLayout) view.findViewById(R.id.tabLayout);
         viewPager = (ViewPager) view.findViewById(R.id.pager);
